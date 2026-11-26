@@ -1,0 +1,3582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1a14">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Wonderland">
+    <meta name="description" content="Wonderland Chronicles: Four Curiosities & Mysteries — An interactive Victorian storybook adventure with Read-Aloud narration, puzzles, and 16 unlockable endings.">
+    <title>Wonderland Chronicles: Four Curiosities &amp; Mysteries</title>
+
+    <!-- Self-contained Golden Pocket-Watch & Keyhole SVG Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3CradialGradient id='bg' cx='50%25' cy='50%25' r='55%25'%3E%3Cstop offset='0%25' stop-color='%2316382b'/%3E%3Cstop offset='100%25' stop-color='%230b1a14'/%3E%3C/radialGradient%3E%3ClinearGradient id='gold' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f7dc88'/%3E%3Cstop offset='50%25' stop-color='%23c59b27'/%3E%3Cstop offset='100%25' stop-color='%238c6712'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='512' height='512' rx='112' fill='url(%23bg)'/%3E%3Crect x='18' y='18' width='476' height='476' rx='98' fill='none' stroke='url(%23gold)' stroke-width='8' stroke-opacity='0.75'/%3E%3Ccircle cx='256' cy='74' r='28' fill='none' stroke='url(%23gold)' stroke-width='14'/%3E%3Crect x='232' y='96' width='48' height='36' rx='10' fill='url(%23gold)'/%3E%3Ccircle cx='256' cy='286' r='164' fill='url(%23gold)'/%3E%3Ccircle cx='256' cy='286' r='138' fill='%23f6eedc' stroke='%237a1c24' stroke-width='6'/%3E%3Cpath d='M256 226a26 26 0 0 1 14 47.6L282 346h-52l12-72.4A26 26 0 0 1 256 226z' fill='%23101b33' opacity='0.18'/%3E%3Cline x1='256' y1='286' x2='256' y2='192' stroke='%237a1c24' stroke-width='12' stroke-linecap='round'/%3E%3Cline x1='256' y1='286' x2='324' y2='322' stroke='%23101b33' stroke-width='10' stroke-linecap='round'/%3E%3Ccircle cx='256' cy='286' r='14' fill='%23c59b27' stroke='%23101b33' stroke-width='4'/%3E%3C/svg%3E">
+
+    <!-- Optional Google Fonts (gracefully falls back to classic serif fonts offline) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-midnight: #0a1426;
+            --bg-velvet: #11203b;
+            --emerald-deep: #0f2c22;
+            --emerald-rich: #194737;
+            --parchment-light: #f7efe0;
+            --parchment-mid: #ece0c8;
+            --parchment-dark: #d9c6a1;
+            --gold-antique: #c59b27;
+            --gold-bright: #e8c563;
+            --crimson-royal: #7e1d26;
+            --crimson-hover: #9c2530;
+            --ink-dark: #221913;
+            --ink-muted: #58483c;
+            --font-display: 'Cinzel Decorative', 'IM Fell English', Georgia, serif;
+            --font-title: 'IM Fell English', 'Cormorant Garamond', Georgia, serif;
+            --font-body: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: var(--font-body);
+            background-color: var(--bg-midnight);
+            background-image:
+                radial-gradient(circle at 18% 15%, rgba(25, 71, 55, 0.35) 0%, transparent 48%),
+                radial-gradient(circle at 85% 85%, rgba(126, 29, 38, 0.25) 0%, transparent 50%),
+                repeating-linear-gradient(45deg, rgba(197, 155, 39, 0.03) 0px, rgba(197, 155, 39, 0.03) 2px, transparent 2px, transparent 12px);
+            color: var(--ink-dark);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Typography Helpers */
+        .font-display {
+            font-family: var(--font-display);
+        }
+        .font-title {
+            font-family: var(--font-title);
+        }
+
+        /* Header Bar */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: linear-gradient(145deg, #132342 0%, #091224 100%);
+            border-bottom: 2px solid var(--gold-antique);
+            box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55);
+            padding: 0.65rem 1rem;
+        }
+
+        .header-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.6rem;
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .brand-emblem {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--emerald-rich);
+            border: 1.5px solid var(--gold-bright);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.45);
+        }
+
+        .brand-title {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: clamp(0.95rem, 2.2vw, 1.2rem);
+            color: var(--gold-bright);
+            letter-spacing: 0.04em;
+            line-height: 1.15;
+        }
+
+        .brand-subtitle {
+            margin: 0;
+            font-size: 0.78rem;
+            color: rgba(247, 239, 224, 0.75);
+            font-style: italic;
+        }
+
+        .header-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.45rem;
+            position: relative;
+        }
+
+        /* Buttons */
+        .btn {
+            font-family: var(--font-title);
+            font-size: 0.84rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            padding: 0.45rem 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.38rem;
+            transition: transform 0.18s ease, background 0.2s ease, box-shadow 0.2s ease;
+            border: 1.5px solid var(--gold-antique);
+            text-decoration: none;
+            user-select: none;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .btn-crimson {
+            background: linear-gradient(135deg, var(--crimson-royal), #5e141b);
+            color: var(--parchment-light);
+            border-color: var(--gold-bright);
+        }
+        .btn-crimson:hover:not(:disabled) {
+            background: linear-gradient(135deg, var(--crimson-hover), var(--crimson-royal));
+        }
+
+        .btn-emerald {
+            background: linear-gradient(135deg, var(--emerald-rich), var(--emerald-deep));
+            color: var(--parchment-light);
+            border-color: var(--gold-bright);
+        }
+        .btn-emerald:hover:not(:disabled) {
+            background: linear-gradient(135deg, #225c48, var(--emerald-rich));
+        }
+
+        .btn-velvet {
+            background: #172a4f;
+            color: var(--parchment-light);
+            border-color: rgba(197, 155, 39, 0.75);
+        }
+        .btn-velvet:hover:not(:disabled) {
+            background: #213b6e;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold-bright), var(--gold-antique));
+            color: #101b33;
+            border-color: #fff3cf;
+            font-weight: 700;
+        }
+        .btn-gold:hover:not(:disabled) {
+            box-shadow: 0 4px 14px rgba(232, 197, 99, 0.4);
+        }
+
+        /* Narrator Pill Group */
+        .narrator-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.2rem;
+            background: rgba(8, 15, 29, 0.92);
+            border: 1.5px solid rgba(197, 155, 39, 0.8);
+            border-radius: 9999px;
+            padding: 0.2rem 0.45rem;
+        }
+
+        .narrator-pill-btn {
+            background: transparent;
+            border: none;
+            color: var(--gold-bright);
+            font-family: var(--font-title);
+            font-size: 0.82rem;
+            font-weight: 600;
+            padding: 0.25rem 0.45rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        .narrator-pill-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #9ca3af;
+            display: inline-block;
+        }
+        .status-dot.active {
+            background: #34d399;
+            box-shadow: 0 0 8px #34d399;
+        }
+
+        /* Sound Wave Animation */
+        @keyframes waveBounce {
+            0%, 100% { height: 4px; }
+            50% { height: 14px; }
+        }
+        .wave-bars {
+            display: inline-flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 14px;
+            margin-left: 3px;
+        }
+        .wave-bar {
+            width: 3px;
+            height: 4px;
+            background: var(--gold-bright);
+            border-radius: 2px;
+        }
+        .is-speaking .wave-bar:nth-child(1) { animation: waveBounce 0.7s ease-in-out infinite; }
+        .is-speaking .wave-bar:nth-child(2) { animation: waveBounce 0.7s ease-in-out 0.2s infinite; }
+        .is-speaking .wave-bar:nth-child(3) { animation: waveBounce 0.7s ease-in-out 0.4s infinite; }
+
+        /* Narrator Settings Popover */
+        .narrator-popover {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 0.5rem);
+            width: 300px;
+            max-width: 92vw;
+            background: linear-gradient(155deg, #152647 0%, #0a1324 100%);
+            border: 2px solid var(--gold-bright);
+            border-radius: 1rem;
+            padding: 1rem;
+            color: var(--parchment-light);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.75);
+            z-index: 60;
+        }
+
+        /* Main Container & Cards */
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 1.4rem 1rem 3rem;
+        }
+
+        .parchment-card {
+            background-color: var(--parchment-light);
+            background-image: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.55) 0%, rgba(217, 198, 161, 0.45) 100%);
+            border: 2px solid var(--gold-antique);
+            border-radius: 1.15rem;
+            padding: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 36px rgba(139, 108, 66, 0.22);
+            position: relative;
+        }
+
+        @media (min-width: 640px) {
+            .parchment-card {
+                padding: 2.2rem;
+            }
+        }
+
+        .parchment-card::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            border: 1px solid rgba(197, 155, 39, 0.55);
+            border-radius: 0.85rem;
+            pointer-events: none;
+        }
+
+        .velvet-panel {
+            background: linear-gradient(145deg, #132342 0%, #0b1426 100%);
+            border: 1.5px solid var(--gold-antique);
+            border-radius: 1rem;
+            padding: 1.15rem;
+            color: var(--parchment-light);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        }
+
+        .emerald-panel {
+            background: linear-gradient(145deg, #174535 0%, #0d261d 100%);
+            border: 1.5px solid var(--gold-antique);
+            border-radius: 1rem;
+            padding: 1.15rem;
+            color: var(--parchment-light);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        }
+
+        /* Animations */
+        @keyframes pageTurn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-page {
+            animation: pageTurn 0.42s ease-out forwards;
+        }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-float {
+            animation: floatSlow 4.2s ease-in-out infinite;
+        }
+
+        /* Story Hub Grid */
+        .hub-header {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+        .badge-pill {
+            display: inline-block;
+            padding: 0.25rem 0.9rem;
+            border-radius: 9999px;
+            background: var(--emerald-deep);
+            color: var(--gold-bright);
+            border: 1px solid var(--gold-antique);
+            font-family: var(--font-title);
+            font-size: 0.74rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.55rem;
+        }
+        .hub-title {
+            margin: 0.2rem 0 0.5rem;
+            font-family: var(--font-display);
+            font-size: clamp(1.65rem, 4vw, 2.7rem);
+            color: #101b33;
+            line-height: 1.15;
+        }
+        .hub-lead {
+            margin: 0 auto;
+            max-width: 660px;
+            font-size: 1.15rem;
+            font-style: italic;
+            color: var(--ink-muted);
+            line-height: 1.55;
+        }
+
+        .resume-banner {
+            background: linear-gradient(135deg, #132342, #194737);
+            border: 2px solid var(--gold-bright);
+            border-radius: 0.95rem;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--parchment-light);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.25rem;
+        }
+        @media (min-width: 768px) {
+            .stories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .tale-card {
+            background: linear-gradient(160deg, #fffaf0 0%, #ede0c6 100%);
+            border: 1.5px solid #a88234;
+            border-radius: 1rem;
+            padding: 1.35rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            cursor: pointer;
+        }
+        .tale-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--crimson-royal);
+            box-shadow: 0 12px 26px rgba(16, 27, 51, 0.22);
+        }
+
+        .tale-card-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .tale-emblem {
+            width: 68px;
+            height: 68px;
+            border-radius: 50%;
+            background: #101b33;
+            border: 2px solid var(--gold-antique);
+            padding: 0.45rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Setup Screen Grids */
+        .setup-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .setup-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .select-card {
+            background: #fbf5e8;
+            border: 2px solid #bfa05a;
+            border-radius: 0.9rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .select-card:hover {
+            border-color: var(--emerald-rich);
+            transform: translateY(-2px);
+        }
+        .select-card.selected {
+            background: linear-gradient(155deg, #132342, #183d30);
+            border-color: var(--gold-bright);
+            color: var(--parchment-light);
+            box-shadow: 0 8px 20px rgba(16, 27, 51, 0.35);
+        }
+        .select-card.selected .muted-desc {
+            color: rgba(247, 239, 224, 0.85);
+        }
+
+        /* Active Gameplay Layout */
+        .game-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.35rem;
+            align-items: start;
+        }
+        @media (min-width: 960px) {
+            .game-layout {
+                grid-template-columns: 330px 1fr;
+            }
+        }
+
+        .sidebar-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Progress Bars */
+        .meter-track {
+            width: 100%;
+            height: 9px;
+            background: #081020;
+            border-radius: 9999px;
+            border: 1px solid rgba(197, 155, 39, 0.45);
+            overflow: hidden;
+            margin-top: 0.25rem;
+        }
+        .meter-fill-gold {
+            height: 100%;
+            background: linear-gradient(90deg, #d99b26, #f5d77f);
+            transition: width 0.4s ease;
+        }
+        .meter-fill-emerald {
+            height: 100%;
+            background: linear-gradient(90deg, #1d8a64, #5eead4);
+            transition: width 0.4s ease;
+        }
+
+        /* Clue Satchel Items */
+        .clue-item {
+            background: rgba(8, 15, 29, 0.75);
+            border: 1px solid rgba(197, 155, 39, 0.5);
+            border-radius: 0.65rem;
+            padding: 0.55rem 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Scene Narrative & Drop Cap */
+        .scene-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            border-bottom: 2px solid rgba(197, 155, 39, 0.55);
+            padding-bottom: 1.1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .scene-art-circle {
+            width: 104px;
+            height: 104px;
+            border-radius: 50%;
+            background: #101b33;
+            border: 2.5px solid var(--gold-antique);
+            padding: 0.65rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            flex-shrink: 0;
+        }
+
+        .narrative-body p {
+            font-size: 1.22rem;
+            line-height: 1.72;
+            margin: 0 0 1rem;
+            color: var(--ink-dark);
+        }
+
+        .narrative-body p:first-child::first-letter {
+            float: left;
+            font-family: var(--font-display);
+            font-size: 3.15rem;
+            line-height: 0.85;
+            padding: 4px 10px 0 2px;
+            color: var(--crimson-royal);
+            text-shadow: 1px 1px 0 var(--gold-bright);
+        }
+
+        .narrating-paragraph {
+            background: linear-gradient(to right, rgba(232, 197, 99, 0.32), rgba(25, 71, 55, 0.08));
+            border-left: 3.5px solid var(--crimson-royal);
+            padding-left: 0.75rem;
+            border-radius: 0.35rem;
+        }
+
+        /* Clue Found Banner */
+        .clue-banner {
+            background: rgba(25, 71, 55, 0.14);
+            border: 1.5px solid var(--emerald-rich);
+            border-radius: 0.8rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.15rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Puzzle Box */
+        .puzzle-box {
+            background: linear-gradient(155deg, #e8d9b8, #dfd0ae);
+            border: 2px solid #8c6b23;
+            border-radius: 0.95rem;
+            padding: 1.2rem;
+            margin: 1.25rem 0 1.5rem;
+            box-shadow: inset 0 0 18px rgba(102, 74, 22, 0.18);
+        }
+
+        .puzzle-tile-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 0.65rem;
+            margin: 0.85rem 0;
+        }
+
+        .puzzle-tile {
+            background: #fffaf0;
+            border: 2px solid #9e7b2f;
+            border-radius: 0.75rem;
+            padding: 0.7rem 0.6rem;
+            font-family: var(--font-title);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #101b33;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .puzzle-tile:hover:not(:disabled) {
+            background: #f5e6c4;
+            border-color: var(--emerald-deep);
+            transform: translateY(-2px);
+        }
+        .puzzle-tile.selected-tile {
+            background: var(--emerald-deep);
+            color: var(--gold-bright);
+            border-color: var(--gold-bright);
+        }
+
+        /* Chess Grid for Tale IV Puzzle */
+        .chess-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            max-width: 290px;
+            margin: 0.9rem auto;
+        }
+        .chess-cell {
+            aspect-ratio: 1 / 1;
+            border-radius: 0.55rem;
+            border: 2px solid #8c6b23;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-title);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .chess-cell.light-sq { background: #fbf4e4; color: #101b33; }
+        .chess-cell.dark-sq { background: #264d3e; color: #f7efe0; }
+        .chess-cell.knight-here {
+            box-shadow: 0 0 0 3px var(--gold-bright);
+            background: #101b33 !important;
+            color: var(--gold-bright) !important;
+        }
+        .chess-cell.goal-sq {
+            border-color: var(--crimson-royal);
+        }
+
+        /* Deduction Ledger Selects for Tale III */
+        .ledger-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            background: rgba(255, 250, 240, 0.85);
+            border: 1px solid #b59449;
+            border-radius: 0.65rem;
+            padding: 0.6rem 0.8rem;
+            margin-bottom: 0.55rem;
+        }
+        .ledger-select {
+            padding: 0.4rem 0.65rem;
+            border-radius: 0.5rem;
+            border: 1.5px solid #8c6b23;
+            background: #fffdf8;
+            font-family: var(--font-body);
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: #101b33;
+        }
+
+        /* Choice Buttons */
+        .choices-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            margin-top: 1.25rem;
+        }
+
+        .choice-btn {
+            width: 100%;
+            text-align: left;
+            background: linear-gradient(to right, #efe3c8, #faf3e4);
+            border: 1.5px solid #9e7b2f;
+            border-radius: 0.85rem;
+            padding: 0.9rem 1.1rem;
+            font-family: var(--font-body);
+            font-size: 1.12rem;
+            font-weight: 600;
+            color: var(--ink-dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.85rem;
+            transition: all 0.22s ease;
+        }
+        .choice-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background: linear-gradient(to right, #fffaf0, #f2e2bf);
+            border-color: var(--emerald-deep);
+            box-shadow: 0 6px 16px rgba(15, 44, 34, 0.2);
+        }
+        .choice-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            background: #e4dac5;
+        }
+        .choice-btn.special-role {
+            border-left: 5px solid var(--emerald-rich);
+        }
+        .choice-btn.special-clue {
+            border-left: 5px solid var(--crimson-royal);
+        }
+
+        .choice-tag {
+            font-family: var(--font-title);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            background: #101b33;
+            color: var(--gold-bright);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Divider */
+        .ornate-divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.35rem 0;
+            color: var(--crimson-royal);
+            opacity: 0.8;
+        }
+        .ornate-divider::before,
+        .ornate-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #9e7b2f;
+        }
+
+        /* Modals */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 70;
+            background: rgba(5, 10, 20, 0.8);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-card {
+            max-width: 580px;
+            width: 100%;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 0.9rem;
+            right: 0.9rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid rgba(197, 155, 39, 0.6);
+            background: rgba(0, 0, 0, 0.35);
+            color: #fff;
+            font-size: 1.25rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .oracle-textarea {
+            width: 100%;
+            border-radius: 0.75rem;
+            background: #081020;
+            border: 1.5px solid var(--gold-antique);
+            color: var(--parchment-light);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            padding: 0.75rem;
+            resize: vertical;
+        }
+        .oracle-textarea:focus {
+            outline: none;
+            border-color: var(--gold-bright);
+        }
+
+        .oracle-reply-box {
+            margin-top: 1rem;
+            background: var(--parchment-light);
+            color: var(--ink-dark);
+            border: 2px solid var(--gold-antique);
+            border-radius: 0.85rem;
+            padding: 1rem;
+        }
+
+        /* Toast Notification */
+        .toast-banner {
+            position: fixed;
+            bottom: 1.1rem;
+            right: 1.1rem;
+            z-index: 80;
+            max-width: 340px;
+            background: linear-gradient(145deg, #132342, #0b1426);
+            color: var(--parchment-light);
+            border: 2px solid var(--gold-bright);
+            border-radius: 0.85rem;
+            padding: 0.8rem 1rem;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.65);
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            font-size: 0.96rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =================================================================== -->
+    <!-- TOP HEADER BAR (ZERO DUPLICATE IDs)                                 -->
+    <!-- =================================================================== -->
+    <header class="app-header">
+        <div class="header-inner">
+            <div class="brand-box" onclick="openStoryHub()" role="button" tabindex="0" title="Return to Story Anthology">
+                <div class="brand-emblem">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e8c563" stroke-width="1.9">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M12 7v5l3 3"/>
+                        <path d="M12 2v2M12 20v2M2 12h2M20 12h2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="brand-title">Wonderland Chronicles</h1>
+                    <p class="brand-subtitle">Four Curiosities &amp; Mysteries</p>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <!-- Narrator Playback Pill (Shown during active story chapters) -->
+                <div id="header-narrator-pill" class="narrator-pill hidden">
+                    <button type="button" id="btn-header-read" class="narrator-pill-btn" onclick="toggleSceneNarration()" title="Read Aloud or Pause">
+                        <span id="header-read-icon">🔊</span>
+                        <span id="header-read-label">Read Aloud</span>
+                        <span id="header-wave-bars" class="wave-bars hidden">
+                            <span class="wave-bar"></span>
+                            <span class="wave-bar"></span>
+                            <span class="wave-bar"></span>
+                        </span>
+                    </button>
+                    <button type="button" id="btn-header-stop" class="narrator-pill-btn hidden" onclick="stopNarration()" title="Stop Narration">
+                        ⏹
+                    </button>
+                </div>
+
+                <!-- Auto-Read Toggle -->
+                <button type="button" id="btn-auto-read" class="btn btn-velvet" onclick="toggleAutoRead()" title="Automatically narrate new scenes">
+                    <span id="auto-read-dot" class="status-dot"></span>
+                    <span>Auto-Read: <strong id="auto-read-label" style="color:#e8c563;">Off</strong></span>
+                </button>
+
+                <!-- Narrator Voice & Speed Settings -->
+                <button type="button" id="btn-narrator-settings" class="btn btn-velvet" onclick="toggleNarratorPopover(event)" title="Voice & Speed Settings">
+                    <span>🎙️</span>
+                    <span>Voice</span>
+                </button>
+
+                <!-- Narrator Settings Popover -->
+                <div id="narrator-popover" class="narrator-popover hidden">
+                    <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(197,155,39,0.4); padding-bottom:0.5rem; margin-bottom:0.75rem;">
+                        <strong class="font-title" style="color:#e8c563; font-size:0.95rem;">🎙️ Storybook Narrator</strong>
+                        <button type="button" onclick="closeNarratorPopover()" style="background:none; border:none; color:#f7efe0; font-size:1.2rem; cursor:pointer;">&times;</button>
+                    </div>
+
+                    <div style="margin-bottom:0.75rem;">
+                        <label for="narrator-voice-select" style="display:block; font-size:0.82rem; margin-bottom:0.3rem; color:#f7efe0;">Storyteller Voice</label>
+                        <select id="narrator-voice-select" onchange="changeNarratorVoice(this.value)" style="width:100%; padding:0.45rem; border-radius:0.5rem; background:#081020; color:#f7efe0; border:1px solid #c59b27; font-size:0.82rem;">
+                            <option value="">System Storyteller</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom:0.75rem;">
+                        <span style="display:block; font-size:0.82rem; margin-bottom:0.3rem; color:#f7efe0;">Reading Pace</span>
+                        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.35rem;">
+                            <button type="button" class="btn btn-velvet speed-opt-btn" data-rate="0.85" onclick="setNarratorRate(0.85)" style="padding:0.35rem; font-size:0.76rem;">0.85x Slow</button>
+                            <button type="button" class="btn btn-emerald speed-opt-btn" data-rate="1.0" onclick="setNarratorRate(1.0)" style="padding:0.35rem; font-size:0.76rem;">1.0x Story</button>
+                            <button type="button" class="btn btn-velvet speed-opt-btn" data-rate="1.2" onclick="setNarratorRate(1.2)" style="padding:0.35rem; font-size:0.76rem;">1.2x Brisk</button>
+                        </div>
+                    </div>
+
+                    <div style="border-top:1px solid rgba(197,155,39,0.3); padding-top:0.6rem; margin-bottom:0.75rem; font-size:0.84rem;">
+                        <label style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.45rem; cursor:pointer;">
+                            <span>Read Choices Aloud</span>
+                            <input type="checkbox" id="chk-read-choices" onchange="toggleNarratorOption('readChoices', this.checked)">
+                        </label>
+                        <label style="display:flex; align-items:center; justify-content:space-between; cursor:pointer;">
+                            <span>Auto-Read Looking Glass</span>
+                            <input type="checkbox" id="chk-read-oracle" checked onchange="toggleNarratorOption('readOracle', this.checked)">
+                        </label>
+                    </div>
+
+                    <button type="button" class="btn btn-emerald" onclick="previewNarratorVoice()" style="width:100%;">
+                        🔊 Test Storyteller Voice
+                    </button>
+                </div>
+
+                <!-- Switch Tale Button -->
+                <button type="button" class="btn btn-crimson" onclick="openStoryHub()">
+                    <span>📚</span>
+                    <span>Switch Tale</span>
+                </button>
+
+                <!-- Endings Chronicle Button -->
+                <button type="button" class="btn btn-velvet" onclick="openEndingsModal()">
+                    <span>🏆</span>
+                    <span id="header-endings-badge">Endings (0/16)</span>
+                </button>
+
+                <!-- Install App Button -->
+                <button type="button" id="btn-install-app" class="btn btn-gold" onclick="openInstallModal()">
+                    <span>📲</span>
+                    <span>Install App</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- =================================================================== -->
+    <!-- MAIN CONTENT AREA                                                   -->
+    <!-- =================================================================== -->
+    <main class="container">
+
+        <!-- VIEW 0: STORY SELECTION HUB -->
+        <section id="story-hub-screen" class="animate-page">
+            <div class="parchment-card">
+                <div class="hub-header">
+                    <span class="badge-pill">The Complete Illustrated Anthology</span>
+                    <h2 class="hub-title">Wonderland Chronicles</h2>
+                    <p class="hub-lead">
+                        Step through the Looking Glass into four interactive Victorian mysteries—complete with Read-Aloud narration, playable riddles, and sixteen unlockable endings.
+                    </p>
+                </div>
+
+                <!-- Resume Saved Adventure Banner (Shown if mid-story progress exists) -->
+                <div id="resume-save-banner" class="resume-banner hidden">
+                    <div>
+                        <span style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:#e8c563; display:block;">Bookmark Found</span>
+                        <strong id="resume-save-title" class="font-title" style="font-size:1.1rem;">Continue Your Saved Chapter</strong>
+                        <p id="resume-save-meta" style="margin:0.15rem 0 0; font-size:0.92rem; color:rgba(247,239,224,0.85);"></p>
+                    </div>
+                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-gold" onclick="resumeSavedAdventure()">Resume Chapter &rarr;</button>
+                        <button type="button" class="btn btn-velvet" onclick="clearSavedAdventure()">Clear Bookmark</button>
+                    </div>
+                </div>
+
+                <!-- 4 Tale Cards Grid -->
+                <div id="stories-grid" class="stories-grid"></div>
+            </div>
+        </section>
+
+        <!-- VIEW 1: CHARACTER & COMPANION SETUP SCREEN -->
+        <section id="setup-screen" class="hidden animate-page">
+            <div class="parchment-card" style="max-width:920px; margin:0 auto;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem;">
+                    <button type="button" class="btn btn-velvet" onclick="openStoryHub()">&larr; All 4 Tales</button>
+                    <span id="setup-story-badge" class="badge-pill" style="margin:0;">Tale I of IV</span>
+                </div>
+
+                <div style="text-align:center; margin-bottom:1.75rem;">
+                    <div id="setup-story-art" class="scene-art-circle" style="width:84px; height:84px; margin:0 auto 0.75rem;"></div>
+                    <h2 id="setup-story-title" class="hub-title" style="font-size:clamp(1.4rem,3vw,2.1rem);">Story Title</h2>
+                    <p id="setup-story-hook" class="hub-lead"></p>
+                </div>
+
+                <h3 class="font-title" style="color:#0f2c22; border-bottom:1px solid rgba(197,155,39,0.6); padding-bottom:0.4rem; margin-bottom:0.85rem;">
+                    I. Choose Your Wonderland Role
+                </h3>
+                <div id="archetype-cards" class="setup-grid"></div>
+
+                <h3 class="font-title" style="color:#0f2c22; border-bottom:1px solid rgba(197,155,39,0.6); padding-bottom:0.4rem; margin-bottom:0.85rem;">
+                    II. Choose Your Guide &amp; Companion
+                </h3>
+                <div id="companion-cards" class="setup-grid"></div>
+
+                <div style="text-align:center; margin-top:1.25rem;">
+                    <button type="button" class="btn btn-emerald" onclick="startAdventure()" style="padding:0.85rem 2rem; font-size:1.05rem;">
+                        Begin This Chapter &rarr;
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 2: ACTIVE STORYBOOK GAMEPLAY SCREEN -->
+        <section id="game-screen" class="hidden">
+            <div class="game-layout">
+
+                <!-- LEFT SIDEBAR: Investigator Ledger -->
+                <aside class="sidebar-stack">
+                    <!-- Investigator Profile & Meters -->
+                    <div class="velvet-panel">
+                        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:0.5rem; border-bottom:1px solid rgba(197,155,39,0.4); padding-bottom:0.75rem; margin-bottom:0.75rem;">
+                            <div>
+                                <span style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.1em; color:#e8c563; display:block;">Investigator</span>
+                                <strong id="hud-role-name" class="font-title" style="font-size:1.08rem; color:#fff;">The Curious Traveler</strong>
+                                <p id="hud-role-trait" style="margin:0.15rem 0 0; font-size:0.85rem; color:rgba(247,239,224,0.8); font-style:italic;"></p>
+                            </div>
+                            <div style="background:#081020; border:1px solid rgba(197,155,39,0.65); border-radius:0.65rem; padding:0.4rem 0.65rem; text-align:right; flex-shrink:0;">
+                                <span id="hud-status-label" style="font-size:0.68rem; text-transform:uppercase; color:#e8c563; display:block;">Watch Time</span>
+                                <strong id="hud-watch-time" class="font-title" style="font-size:0.85rem; color:#fff;">11:50 PM</strong>
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom:0.65rem;">
+                            <div style="display:flex; justify-content:space-between; font-size:0.86rem;">
+                                <span>🔍 Curiosity</span>
+                                <strong id="hud-curiosity-val" style="color:#e8c563;">6 / 10</strong>
+                            </div>
+                            <div class="meter-track">
+                                <div id="hud-curiosity-bar" class="meter-fill-gold" style="width:60%;"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="display:flex; justify-content:space-between; font-size:0.86rem;">
+                                <span>🫖 Tea-Cup Whimsy</span>
+                                <strong id="hud-whimsy-val" style="color:#5eead4;">6 / 10</strong>
+                            </div>
+                            <div class="meter-track">
+                                <div id="hud-whimsy-bar" class="meter-fill-emerald" style="width:60%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Companion Whisper & Looking Glass Oracle Trigger -->
+                    <div class="emerald-panel">
+                        <div style="display:flex; align-items:flex-start; gap:0.75rem;">
+                            <div id="hud-companion-avatar" style="width:46px; height:46px; border-radius:50%; background:#0a1f18; border:2px solid #e8c563; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0;">
+                                🎩
+                            </div>
+                            <div>
+                                <strong id="hud-companion-name" class="font-title" style="color:#e8c563; font-size:1rem; display:block;">The Mad Hatter</strong>
+                                <p id="hud-companion-remark" style="margin:0.3rem 0 0; font-size:0.96rem; font-style:italic; line-height:1.4; color:rgba(247,239,224,0.95);"></p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-gold" onclick="openLookingGlassModal()" style="width:100%; margin-top:0.85rem;">
+                            <span>🔮</span>
+                            <span>Consult <span id="btn-ask-companion-name">Companion</span></span>
+                        </button>
+                    </div>
+
+                    <!-- Satchel of Clues -->
+                    <div class="velvet-panel">
+                        <div style="display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid rgba(197,155,39,0.4); padding-bottom:0.45rem; margin-bottom:0.65rem;">
+                            <strong class="font-title" style="color:#e8c563; font-size:0.98rem;">🗝️ Satchel of Clues</strong>
+                            <span id="hud-clues-count" style="font-size:0.8rem; color:rgba(247,239,224,0.8);">0 Collected</span>
+                        </div>
+                        <div id="hud-clues-list"></div>
+                    </div>
+                </aside>
+
+                <!-- RIGHT MAIN STORYBOOK PAGE -->
+                <article id="story-card" class="parchment-card animate-page">
+                    <div class="scene-header">
+                        <div style="flex:1; min-width:220px;">
+                            <div style="display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem; margin-bottom:0.45rem;">
+                                <span id="scene-act-label" class="badge-pill" style="background:#7e1d26; color:#f7efe0; margin:0;">Act I</span>
+                                <button type="button" id="btn-scene-read" class="btn btn-emerald" onclick="toggleSceneNarration()" style="padding:0.28rem 0.75rem; font-size:0.78rem;">
+                                    <span id="scene-read-icon">🔊</span>
+                                    <span id="scene-read-label">Read Page Aloud</span>
+                                </button>
+                            </div>
+                            <h2 id="scene-title" class="hub-title" style="font-size:clamp(1.35rem,3vw,1.95rem); text-align:left; margin:0;">
+                                Scene Title
+                            </h2>
+                        </div>
+                        <div id="scene-illustration" class="scene-art-circle animate-float"></div>
+                    </div>
+
+                    <!-- Clue Notification Banner -->
+                    <div id="clue-banner" class="clue-banner hidden">
+                        <span style="font-size:1.5rem;">✨</span>
+                        <div>
+                            <span style="font-size:0.72rem; text-transform:uppercase; font-weight:700; color:#0f2c22; display:block;">New Clue Added to Satchel</span>
+                            <strong id="clue-banner-text" class="font-title" style="font-size:1.05rem;"></strong>
+                        </div>
+                    </div>
+
+                    <!-- Narrative Text -->
+                    <div id="scene-narrative" class="narrative-body"></div>
+
+                    <!-- Interactive Mini-Puzzle Container -->
+                    <div id="puzzle-container" class="puzzle-box hidden"></div>
+
+                    <div class="ornate-divider">❧ ✦ ❧</div>
+
+                    <!-- Branching Choices -->
+                    <div id="choices-container" class="choices-stack"></div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 1: CONSULT THE LOOKING GLASS (INSTANT OFFLINE ORACLE)         -->
+    <!-- =================================================================== -->
+    <div id="looking-glass-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeLookingGlassModal()">
+        <div class="velvet-panel modal-card">
+            <button type="button" class="modal-close" onclick="closeLookingGlassModal()" aria-label="Close">&times;</button>
+
+            <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.85rem;">
+                <div id="modal-companion-icon" style="width:48px; height:48px; border-radius:50%; background:#194737; border:2px solid #e8c563; display:flex; align-items:center; justify-content:center; font-size:1.6rem;">
+                    🎩
+                </div>
+                <div>
+                    <span style="font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:#e8c563; display:block;">The Looking Glass Oracle</span>
+                    <h3 id="modal-companion-title" class="font-display" style="margin:0; font-size:1.15rem; color:#fff;">Consult Companion</h3>
+                </div>
+            </div>
+
+            <p style="font-size:0.98rem; color:rgba(247,239,224,0.88); margin:0 0 0.75rem; line-height:1.45;">
+                Peer into the shimmering mercury glass for a subtle hint about your current scene, an analysis of your collected clues, or your companion’s thoughts!
+            </p>
+
+            <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:0.75rem;">
+                <button type="button" class="btn btn-velvet" style="font-size:0.78rem; padding:0.32rem 0.65rem;" onclick="askLookingGlass('Give me a subtle hint for this scene.')">
+                    💡 Subtle Hint
+                </button>
+                <button type="button" class="btn btn-velvet" style="font-size:0.78rem; padding:0.32rem 0.65rem;" onclick="askLookingGlass('Inspect the clues in my satchel.')">
+                    🗝️ Inspect My Clues
+                </button>
+                <button type="button" class="btn btn-velvet" style="font-size:0.78rem; padding:0.32rem 0.65rem;" onclick="askLookingGlass('Who or what is behind this mystery?')">
+                    🎭 Mystery Theory
+                </button>
+            </div>
+
+            <textarea id="looking-glass-input" class="oracle-textarea" rows="2" placeholder="Ask a question or type your theory..."></textarea>
+
+            <button type="button" class="btn btn-emerald" onclick="askLookingGlass()" style="width:100%; margin-top:0.65rem; padding:0.65rem;">
+                <span>✨</span>
+                <span>Gaze Into the Looking Glass</span>
+            </button>
+
+            <div id="looking-glass-response-box" class="oracle-reply-box hidden">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.35rem;">
+                    <strong class="font-title" style="font-size:0.82rem; text-transform:uppercase; color:#0f2c22;">Looking-Glass Whisper</strong>
+                    <button type="button" class="btn btn-emerald" onclick="speakLookingGlassAnswer()" style="padding:0.2rem 0.6rem; font-size:0.75rem;">
+                        🔊 Listen
+                    </button>
+                </div>
+                <p id="looking-glass-answer" style="margin:0; font-size:1.05rem; font-style:italic; line-height:1.55;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 2: ENDINGS CHRONICLE (ALL 16 UNLOCKABLE ENDINGS)              -->
+    <!-- =================================================================== -->
+    <div id="endings-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeEndingsModal()">
+        <div class="parchment-card modal-card" style="max-width:760px;">
+            <button type="button" class="modal-close" onclick="closeEndingsModal()" style="color:#101b33; background:rgba(0,0,0,0.08);" aria-label="Close">&times;</button>
+
+            <div style="text-align:center; margin-bottom:1.1rem;">
+                <span class="badge-pill">Chronicle of Fates</span>
+                <h3 class="hub-title" style="font-size:1.65rem;">Unlocked Wonderland Endings</h3>
+                <p id="endings-modal-subtitle" class="hub-lead" style="font-size:1rem;">Discover all 4 endings in each of the 4 tales.</p>
+            </div>
+
+            <div id="endings-list-container" style="display:flex; flex-direction:column; gap:1.1rem;"></div>
+        </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- MODAL 3: INSTALL APP / ADD TO HOME SCREEN GUIDE                     -->
+    <!-- =================================================================== -->
+    <div id="install-guide-modal" class="modal-backdrop hidden" onclick="if(event.target===this) closeInstallModal()">
+        <div class="parchment-card modal-card">
+            <button type="button" class="modal-close" onclick="closeInstallModal()" style="color:#101b33; background:rgba(0,0,0,0.08);" aria-label="Close">&times;</button>
+
+            <div style="text-align:center; margin-bottom:1rem;">
+                <span class="badge-pill">Standalone Storybook App</span>
+                <h3 class="hub-title" style="font-size:1.55rem;">Add to Your Home Screen</h3>
+                <p style="margin:0.35rem 0 0; font-size:1rem; color:var(--ink-muted); font-style:italic;">
+                    Launch Wonderland Chronicles full-screen with its golden pocket-watch icon and crisp Read-Aloud narration.
+                </p>
+            </div>
+
+            <div style="background:#efe3c8; border:1.5px solid #c59b27; border-radius:0.8rem; padding:0.9rem; margin-bottom:0.75rem;">
+                <strong class="font-title" style="color:#0f2c22; display:block; margin-bottom:0.3rem;">🤖 Android Phone / Tablet (Chrome)</strong>
+                <p style="margin:0; font-size:0.96rem; line-height:1.45;">
+                    1. Tap the <strong>three dots (⋮)</strong> in the top-right corner of Chrome.<br>
+                    2. Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.<br>
+                    3. Tap <strong>Add / Install</strong> to place the icon on your home screen.
+                </p>
+            </div>
+
+            <div style="background:#efe3c8; border:1.5px solid #c59b27; border-radius:0.8rem; padding:0.9rem; margin-bottom:1rem;">
+                <strong class="font-title" style="color:#0f2c22; display:block; margin-bottom:0.3rem;">🍎 iPad &amp; iPhone (Safari)</strong>
+                <p style="margin:0; font-size:0.96rem; line-height:1.45;">
+                    1. Tap the <strong>Share</strong> icon (square with an upward arrow) in Safari.<br>
+                    2. Scroll down and tap <strong>Add to Home Screen</strong>.<br>
+                    3. Tap <strong>Add</strong> in the upper-right corner.
+                </p>
+            </div>
+
+            <div style="text-align:center;">
+                <button type="button" class="btn btn-emerald" onclick="closeInstallModal()" style="padding:0.55rem 1.5rem;">
+                    Back to Storybook
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Message Box -->
+    <div id="toast-box" class="toast-banner hidden">
+        <span id="toast-icon" style="font-size:1.3rem;">🕰️</span>
+        <span id="toast-message"></span>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- COMPLETE SELF-CONTAINED APPLICATION SCRIPT                          -->
+    <!-- =================================================================== -->
+    <script>
+        // =====================================================================
+        // 1. INLINE VICTORIAN SVG ARTWORK
+        // =====================================================================
+        const SVG_ART = {
+            watch: `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="54" r="34" fill="#1b2d52" stroke="#e8c563" stroke-width="4"/><circle cx="50" cy="54" r="28" fill="#f7efe0" stroke="#c59b27" stroke-width="1.5"/><rect x="45" y="12" width="10" height="8" rx="2" fill="#e8c563"/><circle cx="50" cy="10" r="5" fill="none" stroke="#e8c563" stroke-width="2.5"/><line x1="50" y1="54" x2="50" y2="34" stroke="#7e1d26" stroke-width="3" stroke-linecap="round"/><line x1="50" y1="54" x2="36" y2="62" stroke="#101b33" stroke-width="2.5" stroke-linecap="round"/><circle cx="50" cy="54" r="3" fill="#c59b27"/></svg>`,
+            hat: `<svg viewBox="0 0 100 100" width="100%" height="100%"><ellipse cx="50" cy="76" rx="40" ry="10" fill="#194737" stroke="#e8c563" stroke-width="2.5"/><path d="M28 74 L33 25 Q50 20 67 25 L72 74 Z" fill="#0f2c22" stroke="#e8c563" stroke-width="2.5"/><rect x="30" y="58" width="40" height="10" fill="#7e1d26" stroke="#e8c563" stroke-width="1.5"/><rect x="56" y="42" width="18" height="13" rx="2" transform="rotate(-12 56 42)" fill="#f7efe0" stroke="#101b33" stroke-width="1.5"/><text x="58" y="51" font-size="7" font-weight="bold" fill="#101b33" transform="rotate(-12 56 42)">10/6</text></svg>`,
+            roses: `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 85 L50 45 M50 65 L32 52 M50 58 L68 46" stroke="#2e7d5b" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="35" r="14" fill="#9e1b24" stroke="#e8c563" stroke-width="2"/><circle cx="28" cy="48" r="10" fill="#f7efe0" stroke="#c59b27" stroke-width="2"/><circle cx="72" cy="42" r="11" fill="#9e1b24" stroke="#e8c563" stroke-width="2"/></svg>`,
+            keyhole: `<svg viewBox="0 0 100 100" width="100%" height="100%"><rect x="26" y="16" width="48" height="68" rx="22" fill="#1b2d52" stroke="#e8c563" stroke-width="3"/><circle cx="50" cy="42" r="10" fill="#e8c563"/><path d="M44 48 L56 48 L60 70 L40 70 Z" fill="#e8c563"/><circle cx="50" cy="42" r="5" fill="#101b33"/></svg>`,
+            teacup: `<svg viewBox="0 0 100 100" width="100%" height="100%"><ellipse cx="50" cy="76" rx="34" ry="7" fill="#e8c563"/><path d="M26 42 L74 42 L68 72 Q50 78 32 72 Z" fill="#f7efe0" stroke="#c59b27" stroke-width="2.5"/><path d="M72 47 Q86 47 84 58 Q82 66 69 65" fill="none" stroke="#e8c563" stroke-width="4"/><path d="M40 32 Q36 22 42 16 M54 30 Q50 20 56 14" fill="none" stroke="#e8c563" stroke-width="2" stroke-linecap="round"/></svg>`,
+            jabberwock: `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M22 76 Q32 45 50 38 Q68 45 78 76" fill="#194737" stroke="#e8c563" stroke-width="2.5"/><path d="M35 44 L22 24 L42 36 M65 44 L78 24 L58 36" fill="#0f2c22" stroke="#e8c563" stroke-width="2"/><circle cx="42" cy="52" r="5.5" fill="#e8c563"/><circle cx="58" cy="52" r="5.5" fill="#e8c563"/><circle cx="42" cy="52" r="2.2" fill="#7e1d26"/><circle cx="58" cy="52" r="2.2" fill="#7e1d26"/><path d="M38 66 Q50 76 62 66" fill="none" stroke="#f7efe0" stroke-width="2.2"/></svg>`,
+            vorpal_box: `<svg viewBox="0 0 100 100" width="100%" height="100%"><rect x="24" y="42" width="52" height="34" rx="5" fill="#0f2c22" stroke="#e8c563" stroke-width="2.5"/><path d="M24 42 Q50 22 76 42" fill="#194737" stroke="#e8c563" stroke-width="2.5"/><circle cx="50" cy="58" r="7" fill="#e8c563"/></svg>`,
+            jam_tart: `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M22 55 L78 55 L70 76 L30 76 Z" fill="#e8c563" stroke="#9e7b2f" stroke-width="2"/><ellipse cx="50" cy="55" rx="28" ry="10" fill="#f7efe0" stroke="#c59b27" stroke-width="2"/><path d="M50 61 C42 54 37 49 43 45 C46 43 49 45 50 47 C51 45 54 43 57 45 C63 49 58 54 50 61 Z" fill="#9e1b24"/></svg>`,
+            mirror: `<svg viewBox="0 0 100 100" width="100%" height="100%"><ellipse cx="50" cy="48" rx="26" ry="34" fill="#1b2d52" stroke="#e8c563" stroke-width="4"/><ellipse cx="50" cy="48" rx="20" ry="28" fill="#a8d5e5" stroke="#c59b27" stroke-width="1.5"/><path d="M46 22 L52 44 L42 56 L55 74" fill="none" stroke="#101b33" stroke-width="2" stroke-linecap="round"/><rect x="44" y="82" width="12" height="8" rx="2" fill="#e8c563"/></svg>`,
+            chess_knight: `<svg viewBox="0 0 100 100" width="100%" height="100%"><rect x="26" y="74" width="48" height="10" rx="3" fill="#e8c563"/><path d="M34 74 L38 50 Q32 38 42 26 L52 18 L56 26 Q68 30 66 44 Q64 54 54 56 L62 74 Z" fill="#f7efe0" stroke="#c59b27" stroke-width="2.5"/><circle cx="48" cy="31" r="2.5" fill="#101b33"/></svg>`
+        };
+
+        // =====================================================================
+        // 2. CHARACTER ARCHETYPES & COMPANIONS
+        // =====================================================================
+        const ARCHETYPES = [
+            {
+                id: 'traveler',
+                name: 'The Curious Traveler',
+                icon: '🧭',
+                trait: 'Keen Eye for Oddities',
+                desc: 'Armed with boundless wonder and a notebook of impossibilities. Unlocks curiosity paths and spots subtle anomalies.',
+                stats: { curiosity: 7, whimsy: 6 }
+            },
+            {
+                id: 'detective',
+                name: 'The Tea-Time Detective',
+                icon: '🔎',
+                trait: 'Deduction Over Darjeeling',
+                desc: 'Sharp-witted Victorian sleuth who spots alibis faster than a March Hare spills sugar. Unlocks forensic inspections.',
+                stats: { curiosity: 8, whimsy: 4 }
+            },
+            {
+                id: 'cardkeeper',
+                name: 'The Royal Card-Keeper',
+                icon: '🂡',
+                trait: 'Court Etiquette & Bluffing',
+                desc: 'Keeper of the Queen’s painted deck. Knows palace passwords, guard etiquette, and how to out-bluff nobility.',
+                stats: { curiosity: 5, whimsy: 8 }
+            }
+        ];
+
+        const COMPANIONS = [
+            {
+                id: 'hatter',
+                name: 'The Mad Hatter',
+                icon: '🎩',
+                tagline: 'Master of Riddles & Backward Clocks',
+                introRemark: '"A mystery is just like a riddle without an answer—until you pour enough tea on it!"'
+            },
+            {
+                id: 'cheshire',
+                name: 'The Cheshire Cat',
+                icon: '😸',
+                tagline: 'Phantasm of Cryptic Truths',
+                introRemark: '"Most everyone in Wonderland is mad, my dear investigator—which makes solving crimes delightfully unpredictable."'
+            },
+            {
+                id: 'rabbit',
+                name: 'The White Rabbit',
+                icon: '🐇',
+                tagline: 'Anxious Herald of the Royal Court',
+                introRemark: '"Oh my fur and whiskers! Whatever happens today, we simply MUST not be late for the final verdict!"'
+            }
+        ];
+
+        // =====================================================================
+        // 3. COMPLETE 4-TALE ANTHOLOGY (16 ENDINGS)
+        // =====================================================================
+        const STORIES = {
+            pocket_watch: {
+                id: 'pocket_watch',
+                badge: 'Tale I of IV',
+                title: 'The Vanishing of the Golden Pocket Watch',
+                subtitle: 'A Mystery in Looking-Glass Time',
+                illustration: 'watch',
+                statusLabel: 'Watch Time',
+                hook: 'Ten minutes before the Grand Un-Birthday Tea Party, the Queen’s ceremonial Golden Pocket Watch vanished from its velvet pedestal—sending Wonderland’s clocks ticking sideways.',
+                loreSummary: 'The Knave of Hearts tried to steal the Golden Pocket Watch using magnet-laced tart oil to frame the White Rabbit; the panicked White Rabbit grabbed it to keep it safe and accidentally dropped it into Father Time’s Clockwork Vault beneath the Painted Rose Maze.',
+                startNode: 'pw_courtyard',
+                endings: {
+                    pw_master_detective: {
+                        title: 'The Master of Looking-Glass Deduction',
+                        badge: '🏆 True Detective Ending',
+                        summary: 'You exposed the Knave’s plot, cleared the White Rabbit, and restored normal time to Wonderland.'
+                    },
+                    pw_eternal_tea: {
+                        title: 'The Mad Hatter’s Eternal Un-Birthday',
+                        badge: '🫖 Whimsical Ending',
+                        summary: 'You fused the Golden Watch with the Hatter’s teapot—creating a blissful realm of endless tea and zero schedules.'
+                    },
+                    pw_head_escape: {
+                        title: 'The Great Croquet-Ground Escape',
+                        badge: '🏃 Daring Escape Ending',
+                        summary: 'Cornered by Card Soldiers, you shrank via vial and leaped through a keyhole just as the Queen roared!'
+                    },
+                    pw_timekeeper: {
+                        title: 'Guardian of the Clockwork Heart',
+                        badge: '⏳ Secret Time-Keeper Ending',
+                        summary: 'Beneath the Rose Labyrinth, you accepted Father Time’s starlight waistcoat and became Wonderland’s Time-Keeper.'
+                    }
+                },
+                nodes: {
+                    pw_courtyard: {
+                        act: 'Act I • The Crooked Courtyard',
+                        title: 'The Pedestal of Shattered Seconds',
+                        illustration: 'watch',
+                        time: '11:50 PM (Sideways)',
+                        paragraphs: [
+                            'You stand beside a velvet pedestal in the Queen of Hearts’ topiary courtyard. Where the ceremonial Golden Pocket Watch ought to rest, only a frayed brass chain dangles—swinging left to right like a pendulum possessed.',
+                            'All around the garden, time is visibly unraveling. A fountain of Earl Grey tea arcs upward back into its spout, and a flamingo croquet mallet is slowly un-hatching into an egg.',
+                            'Three immediate leads catch your eye: crimson berry-jam footprints leading toward the Tea Pavilion, a trail of tiny brass gears vanishing into the Painted Rose Maze, and a trembling Three of Spades scrubbing a suspicious stain near the Palace Gate.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Look at that jam! Wild-strawberry preserve—the Dormouse’s favorite, though he’s been asleep since Tuesday week!"',
+                            cheshire: '"A watch doesn’t walk away on its own, unless it’s late for an appointment. Follow the gears or follow the jam."',
+                            rabbit: '"Oh dear, oh dear! The Queen’s trumpet fanfare sounds in twenty minutes! Check the clues quickly!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Inspect the velvet pedestal closely for mechanical residue',
+                                clue: { id: 'pw_gear', name: 'Half-Melted Brass Gear', desc: 'A tiny watch cog warped backward, smelling faintly of peppermint and ozone.' },
+                                statChange: { curiosity: 1 },
+                                next: 'pw_pedestal_secret'
+                            },
+                            {
+                                text: 'Follow the crimson jam footprints toward the Mad Tea Pavilion',
+                                statChange: { whimsy: 1 },
+                                next: 'pw_tea_pavilion'
+                            },
+                            {
+                                text: 'Question the nervous Three of Spades by the Palace Gate',
+                                archetypeReq: 'cardkeeper',
+                                badge: 'Card-Keeper Privilege',
+                                clue: { id: 'pw_recipe', name: 'Confiscated Royal Tart Recipe', desc: 'A parchment listing "Three Drops of Liquid Clock-Oil" as a secret ingredient!' },
+                                statChange: { curiosity: 1 },
+                                next: 'pw_guard_interrogation'
+                            },
+                            {
+                                text: 'Slip into the Painted Rose Maze where the brass gears lead',
+                                statChange: { curiosity: 1 },
+                                next: 'pw_rose_maze'
+                            }
+                        ]
+                    },
+                    pw_pedestal_secret: {
+                        act: 'Act I • The Crooked Courtyard',
+                        title: 'Whispers Beneath the Velvet Cushion',
+                        illustration: 'keyhole',
+                        time: '11:48 PM (Backward)',
+                        paragraphs: [
+                            'Lifting the crimson velvet cushion, you discover a tiny tuft of white fur caught in the clasp alongside the warped brass gear. Someone opened this case in a frantic hurry—not a hardened burglar, but someone trembling with panic.',
+                            'Scratch marks on the marble rim point directly toward both the Tea Pavilion and the Rose Maze.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"White fur? Why, that could be the March Hare after a bleach bath—or our dear friend the Rabbit!"',
+                            cheshire: '"Curious and curiouser. White fur on a royal pedestal... I wonder whose pocket is currently ticking?"',
+                            rabbit: '"W-white fur?! Half the woodland creatures in Wonderland shed in November! Let’s check the Tea Pavilion!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Confront the White Rabbit gently about the white fur',
+                                archetypeReq: 'detective',
+                                badge: 'Detective Deduction',
+                                clue: { id: 'pw_button', name: 'Rabbit’s Frayed Waistcoat Button', desc: 'Torn off near the pedestal at 11:49 PM. He grabbed the watch to keep it from a thief!' },
+                                statChange: { curiosity: 2 },
+                                next: 'pw_tea_pavilion'
+                            },
+                            {
+                                text: 'Head straight to the Mad Tea Pavilion to test the gear',
+                                statChange: { whimsy: 1 },
+                                next: 'pw_tea_pavilion'
+                            },
+                            {
+                                text: 'Follow the trail into the Painted Rose Maze',
+                                statChange: { curiosity: 1 },
+                                next: 'pw_rose_maze'
+                            }
+                        ]
+                    },
+                    pw_guard_interrogation: {
+                        act: 'Act I • Palace Gatehouse',
+                        title: 'The Card-Soldier’s Slip of the Tongue',
+                        illustration: 'roses',
+                        time: '11:52 PM (Looping)',
+                        paragraphs: [
+                            'Flashing your Royal Card-Keeper insignia, you whisper the secret shuffle-code. The Three of Spades snaps to attention, nearly dropping his paintbrush.',
+                            '"Bless my pips, Keeper! Don’t tell the Knave, but ten minutes ago the White Rabbit bolted past here clutching something glowing gold—and he dropped this smudged recipe scroll right before diving into the Rose Maze!"'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Clock-oil in tarts?! No wonder the Queen’s temper ticks like a time-bomb!"',
+                            cheshire: '"The plot thickens like Devonshire clotted cream. The Rabbit ran, and the Knave baked."',
+                            rabbit: '"I—I was only keeping it safe from the Knave! Truly! You must believe me!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Investigate the Mad Tea Pavilion to gather more witnesses',
+                                statChange: { whimsy: 1 },
+                                next: 'pw_tea_pavilion'
+                            },
+                            {
+                                text: 'Enter the Painted Rose Maze to trace where the Rabbit went',
+                                statChange: { curiosity: 1 },
+                                next: 'pw_rose_maze'
+                            }
+                        ]
+                    },
+                    pw_tea_pavilion: {
+                        act: 'Act II • The Mad Tea Pavilion',
+                        title: 'The Table Where Six O’Clock Glitching Begins',
+                        illustration: 'teacup',
+                        time: '06:00 PM (Stuck)',
+                        paragraphs: [
+                            'Under a canopy of paper lanterns, the March Hare is furiously dunking a silver butter-knife into a teapot while the Dormouse snores inside a sugar bowl.',
+                            'Because the Golden Pocket Watch was stolen, the Tea Pavilion’s temporal anchor has snapped: every time tea is poured, it leaps back into the spout unless the ceremonial cups are arranged in exact chronological order.',
+                            '"No room! No room! Unless you align the three enchanted teacups so I can get a proper sip!" cries the March Hare.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Aha! Align the three enchanted teacups—6:00 Chamomile, 6:15 Earl Grey, and 6:30 Darjeeling—and the Dormouse will wake up!"',
+                            cheshire: '"A simple parlor trick of logic. Even a Dormouse knows which cup comes first, second, and third."',
+                            rabbit: '"Hurry, please! Arrange the cups so we can question the March Hare before the Queen arrives!"'
+                        },
+                        puzzle: { type: 'teacups' },
+                        choices: [
+                            {
+                                text: 'Examine the March Hare’s jam-stained glove once the table stabilizes',
+                                requiresPuzzle: true,
+                                clue: { id: 'pw_glove', name: 'Jam-Stained White Glove', desc: 'Smells of strawberry tart jam and bears a royal crown watermark inside the cuff.' },
+                                statChange: { curiosity: 1, whimsy: 1 },
+                                next: 'pw_dormouse_testimony'
+                            },
+                            {
+                                text: 'Bypass the puzzle and slip quietly toward the Painted Rose Maze',
+                                statChange: { curiosity: -1 },
+                                next: 'pw_rose_maze'
+                            }
+                        ]
+                    },
+                    pw_dormouse_testimony: {
+                        act: 'Act II • The Mad Tea Pavilion',
+                        title: 'The Dormouse’s Sleepy Confession',
+                        illustration: 'teacup',
+                        time: '06:03 PM (Stabilizing)',
+                        paragraphs: [
+                            'The three teacups settle into harmony and steam curls peacefully upward. The Dormouse pops his nose out of the sugar bowl, blinking drowsily.',
+                            '"Twinkle, twinkle, little watch..." he yawns. "I saw the Knave of Hearts sneaking behind the Queen’s throne with a magnet—only the White Rabbit grabbed the watch first and fled into the Whispering Rose Maze!"'
+                        ],
+                        clueOnEnter: {
+                            id: 'pw_riddle_scrap',
+                            name: 'Riddle of the Hollow Clock',
+                            desc: 'A verse reading: "Speak the name of what has hands and a face yet never smiles."'
+                        },
+                        companionRemarks: {
+                            hatter: '"The Knave wanted the watch to frame the Rabbit! What a deliciously tangled teapot!"',
+                            cheshire: '"Now you have motive, means, and a riddle. Meet me at the heart of the Rose Maze."',
+                            rabbit: '"You see?! I was saving it from the Knave, and then I dropped it down the clockwork well in the Rose Maze!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Proceed into the Painted Rose Maze with your evidence',
+                                statChange: { curiosity: 1 },
+                                next: 'pw_rose_maze'
+                            },
+                            {
+                                text: 'March directly to the Queen’s Croquet Trial with your evidence',
+                                statChange: { curiosity: 1 },
+                                next: 'pw_croquet_trial'
+                            }
+                        ]
+                    },
+                    pw_rose_maze: {
+                        act: 'Act III • The Painted Rose Labyrinth',
+                        title: 'Where White Roses Drip Crimson',
+                        illustration: 'roses',
+                        time: '11:57 PM (Trembling)',
+                        paragraphs: [
+                            'Towering hedges of thorny roses twist skyward, forming a living cathedral of green and scarlet. In the center of the clearing stands an ancient wrought-iron Clockwork Gate bound by a speaking Brass Lock.',
+                            '"To pass the Clockwork Gate," purrs the Brass Lock in a creaky baritone, "you must answer the Riddle of the Timeless Thief."'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Think carefully—what has two hands and a round pale face, yet never holds a teacup?"',
+                            cheshire: '"Answer true, and the secret beneath Wonderland opens."',
+                            rabbit: '"That’s the gate where the watch rolled down the mossy steps! Solve the riddle!"'
+                        },
+                        puzzle: { type: 'riddle' },
+                        choices: [
+                            {
+                                text: 'Descend the spiral staircase into the Clockwork Vault',
+                                requiresPuzzle: true,
+                                statChange: { curiosity: 2 },
+                                next: 'pw_clockwork_vault'
+                            },
+                            {
+                                text: 'Head out to the Royal Croquet Grounds for the Queen’s Trial',
+                                statChange: { whimsy: 1 },
+                                next: 'pw_croquet_trial'
+                            }
+                        ]
+                    },
+                    pw_clockwork_vault: {
+                        act: 'Act III • Beneath the Looking Glass',
+                        title: 'The Chamber of the Pendulum Heart',
+                        illustration: 'watch',
+                        time: '00:00 (Suspended)',
+                        paragraphs: [
+                            'Beneath the labyrinth lies a breathtaking Victorian observatory filled with floating brass astrolabes. Resting upon a crystal anvil is the Queen’s Golden Pocket Watch—ticking slowly in reverse beside Father Time himself.',
+                            '"The Queen used my watch to rush every Un-Birthday, and the Knave tried to steal it to frame the Rabbit," sighs Father Time. "How shall Wonderland’s clock be set?"'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Drop it into a teapot! Let it be six o’clock forever, with endless cake!"',
+                            cheshire: '"Repair the watch for the Queen, or take Father Time’s mantle yourself."',
+                            rabbit: '"If you return it to Her Majesty and clear my name, you’ll be hailed as a hero!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Repair the watch’s mainspring and bring it to the Queen’s Trial',
+                                badge: 'Requires 2+ Clues',
+                                minClues: 2,
+                                next: 'pw_croquet_trial_triumph'
+                            },
+                            {
+                                text: 'Fuse the Golden Watch with the Mad Hatter’s Teapot for Eternal Tea-Time',
+                                statChange: { whimsy: 3 },
+                                next: 'pw_eternal_tea'
+                            },
+                            {
+                                text: 'Accept Father Time’s starlight waistcoat and become Wonderland’s Time-Keeper',
+                                archetypeReq: 'traveler',
+                                badge: 'Curious Traveler Destiny',
+                                next: 'pw_timekeeper'
+                            },
+                            {
+                                text: 'Accept Father Time’s offer using your deep Curiosity (Curiosity 8+)',
+                                minCuriosity: 8,
+                                badge: 'High Curiosity Destiny',
+                                next: 'pw_timekeeper'
+                            }
+                        ]
+                    },
+                    pw_croquet_trial: {
+                        act: 'Act IV • The Royal Croquet Grounds',
+                        title: 'The Queen’s Thundering Verdict',
+                        illustration: 'roses',
+                        time: '11:59 PM (Critical)',
+                        paragraphs: [
+                            'Trumpets blare across the manicured lawn! The Queen of Hearts towers upon her portable velvet throne, her face turning the exact shade of her prize crimson roses.',
+                            '"My Golden Pocket Watch is STILL missing! Present your proof this instant—or OFF WITH YOUR HEADS!"'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Speak boldly! Or duck very quickly behind a hedgehog!"',
+                            cheshire: '"Without solid clues, a Queen’s courtroom is dreadfully short on patience."',
+                            rabbit: '"Show her what we found—or run for the shrinking keyhole!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Present your collected evidence and expose the Knave of Hearts’ plot!',
+                                minClues: 2,
+                                badge: 'Requires 2+ Clues',
+                                next: 'pw_master_detective'
+                            },
+                            {
+                                text: 'Bluff the Queen with Royal Court etiquette and turn the Knave’s pockets out!',
+                                archetypeReq: 'cardkeeper',
+                                badge: 'Card-Keeper Bluff',
+                                next: 'pw_master_detective'
+                            },
+                            {
+                                text: 'Grab your companion’s hand and bolt for the Miniature Keyhole Gate!',
+                                next: 'pw_head_escape'
+                            }
+                        ]
+                    },
+                    pw_croquet_trial_triumph: {
+                        act: 'Act IV • The Royal Croquet Grounds',
+                        title: 'The Chime That Silenced the Court',
+                        illustration: 'watch',
+                        time: '12:00 AM (Restored)',
+                        paragraphs: [
+                            'You stride onto the croquet lawn holding aloft the restored Golden Pocket Watch—its chime ringing clear as silver bells. At that exact instant, a stolen tart recipe flutters straight out of the Knave of Hearts’ sleeve!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Magnificently timed—literally!"',
+                            cheshire: '"Even the Queen looks speechless."',
+                            rabbit: '"Saved! My head is still firmly attached!"'
+                        },
+                        choices: [
+                            { text: 'Step forward to claim your royal honor and conclude the case', next: 'pw_master_detective' }
+                        ]
+                    },
+                    pw_master_detective: {
+                        act: 'Epilogue • Ending I of IV',
+                        title: 'The Master of Looking-Glass Deduction',
+                        illustration: 'watch',
+                        time: '12:00 PM (In Harmony)',
+                        isEnding: true,
+                        endingKey: 'pw_master_detective',
+                        paragraphs: [
+                            'With crisp Victorian poise, you lay out every thread of the mystery: the Knave of Hearts’ magnet-laced tart oil, the White Rabbit’s panicked dash to protect the watch, and the restored Golden Pocket Watch ticking true once more.',
+                            'For the first time in recorded history, the Queen of Hearts breaks into a genuine smile and awards you the Order of the Golden Tart!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"A splendiferous triumph! Let’s celebrate with three Un-Birthday cakes!"',
+                            cheshire: '"Well played, detective. You kept your wits—and your head."',
+                            rabbit: '"Three cheers for the greatest investigator ever to tumble down a rabbit hole!"'
+                        },
+                        choices: []
+                    },
+                    pw_eternal_tea: {
+                        act: 'Epilogue • Ending II of IV',
+                        title: 'The Mad Hatter’s Eternal Un-Birthday',
+                        illustration: 'teacup',
+                        time: '06:00 PM (Forever)',
+                        isEnding: true,
+                        endingKey: 'pw_eternal_tea',
+                        paragraphs: [
+                            'You drop the Golden Pocket Watch straight into the Mad Hatter’s steaming silver teapot. A wave of warm amber light dissolves every strict schedule and royal decree across Wonderland.',
+                            'You take your permanent seat at the head of the linen table, where the tea is always piping hot and every day is a glorious Un-Birthday.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Huzzah! No more ticking—only crumpets, riddles, and perpetual six o’clock!"',
+                            cheshire: '"Why obey time when you can steep it with chamomile?"',
+                            rabbit: '"Now that I’m never late for anything, my nerves feel marvelous!"'
+                        },
+                        choices: []
+                    },
+                    pw_head_escape: {
+                        act: 'Epilogue • Ending III of IV',
+                        title: 'The Great Croquet-Ground Escape',
+                        illustration: 'keyhole',
+                        time: '11:59 PM (Out of Reach)',
+                        isEnding: true,
+                        endingKey: 'pw_head_escape',
+                        paragraphs: [
+                            '"OFF WITH THEIR HEADS!" roars the Queen as Card Soldiers cascade toward you. You uncork a tiny "DRINK ME" vial, shrink to thimble-size, and dive headfirst through the golden keyhole at the edge of the garden—tumbling safely back into your armchair!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"What a thrilling exit! Next time, bring more jam!"',
+                            cheshire: '"Disappearing is an art form, and you mastered it."',
+                            rabbit: '"Phew! That was far too close for my whiskers!"'
+                        },
+                        choices: []
+                    },
+                    pw_timekeeper: {
+                        act: 'Epilogue • Ending IV of IV',
+                        title: 'Guardian of the Clockwork Heart',
+                        illustration: 'watch',
+                        time: '∞ (Timeless)',
+                        isEnding: true,
+                        endingKey: 'pw_timekeeper',
+                        paragraphs: [
+                            'You drape Father Time’s starlight waistcoat over your shoulders. From this hidden sanctuary beneath the Painted Roses, you become Wonderland’s secret Time-Keeper—granting extra minutes to daydreamers and slowing down moments of joy.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"You’re the boss of the clock now! Keep tea-time extra long!"',
+                            cheshire: '"A secret ruler behind the looking glass."',
+                            rabbit: '"Does this mean I’m officially excused from being late forever?"'
+                        },
+                        choices: []
+                    }
+                }
+            },
+
+            jabberwock: {
+                id: 'jabberwock',
+                badge: 'Tale II of IV',
+                title: 'The Whispers of the Tulgey Wood & The Jabberwock',
+                subtitle: 'A Bioluminescent Ballad of Mimsy & Vorpal',
+                illustration: 'jabberwock',
+                statusLabel: 'Woodland Mood',
+                hook: 'Beneath glowing indigo ferns, the legendary Jabberwock has awakened—not in wrath, but weeping sparks because someone stole its "Vorpal Lullaby" music box, leaving a frumious Bandersnatch guarding the brambles!',
+                loreSummary: 'The Jabberwock is a gentle guardian of the Tulgey Wood who cannot sleep without its "Vorpal Lullaby" music box. Tweedledee and Tweedledum took the brass music box thinking it was a wind-up rattle, and a Jubjub Bird found the crescent winding key.',
+                startNode: 'jw_edge_of_wood',
+                endings: {
+                    jw_befriend: {
+                        title: 'Ballad of the Gentle Jabberwock',
+                        badge: '🐉 Harmonious Ending',
+                        summary: 'You returned the Vorpal Music Box and sang the Jabberwock back to peaceful slumber, earning a shimmering scale of friendship.'
+                    },
+                    jw_vorpal_restored: {
+                        title: 'Keeper of the Vorpal Lullaby',
+                        badge: '🎼 Musical Mystery Ending',
+                        summary: 'You returned the stolen music box to the bramble clearing, restoring bioluminescent calm across the Tulgey Wood.'
+                    },
+                    jw_tweedle_truce: {
+                        title: 'The Great Tweedle-Brother Truce',
+                        badge: '☂️ Comedic Diplomacy Ending',
+                        summary: 'You mediated a treaty between Tweedledee, Tweedledum, and the Bandersnatch over warm marshmallow-root tea.'
+                    },
+                    jw_tumtum_lost: {
+                        title: 'Daydreaming Beneath the Tumtum Tree',
+                        badge: '🍄 Whimsical Reverie Ending',
+                        summary: 'Enchanted by uffish thought and glowing spores, you rested beneath the Tumtum tree until the woods whistled you home.'
+                    }
+                },
+                nodes: {
+                    jw_edge_of_wood: {
+                        act: 'Act I • The Brillig Border',
+                        title: 'Where Slithy Toves Gyre in the Mist',
+                        illustration: 'jabberwock',
+                        time: 'Twas Brillig (Twilight)',
+                        paragraphs: [
+                            'Lantern-moths drift like floating embers above the mossy threshold of the Tulgey Wood. Deep within the violet canopy, a low, resonant whimper shakes the leaves—followed by a burst of harmless golden sparks.',
+                            'Contrary to terrifying nursery rhymes, the Jabberwock isn’t hunting heroes; its treasured "Vorpal Lullaby" music box has vanished, and without its chime, the poor creature cannot sleep!',
+                            'Nearby, a ruffled Jubjub Bird perches atop a crooked signpost, while oversized striped footprints—two identical pairs—lead toward a clearing echoing with bickering voices.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Twas brillig indeed! Beware the Jubjub bird—she trades secrets for shiny buttons!"',
+                            cheshire: '"A sleepless Jabberwock is terribly dramatic. Look at those twin footprints—someone short and round was here."',
+                            rabbit: '"Oh, my ears and whiskers! Do be careful—a frumious Bandersnatch is pacing right behind that bramble!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Offer a shiny waistcoat button to the Jubjub Bird perched on the signpost',
+                                clue: { id: 'jw_silver_key', name: 'Tarnished Vorpal Winding Key', desc: 'A tiny musical key shaped like a crescent moon, dropped from a striped pocket.' },
+                                statChange: { curiosity: 1 },
+                                next: 'jw_jubjub_perch'
+                            },
+                            {
+                                text: 'Follow the twin striped footprints toward the bickering voices',
+                                statChange: { whimsy: 1 },
+                                next: 'jw_tweedle_clearing'
+                            },
+                            {
+                                text: 'Inspect the scorched brambles where the Bandersnatch prowls',
+                                archetypeReq: 'traveler',
+                                badge: 'Curious Traveler Instinct',
+                                clue: { id: 'jw_scale', name: 'Iridescent Tear-Drop Scale', desc: 'Warm to the touch and humming softly in B-flat—the Jabberwock is sad, not fierce!' },
+                                statChange: { curiosity: 2 },
+                                next: 'jw_bandersnatch_bramble'
+                            }
+                        ]
+                    },
+                    jw_jubjub_perch: {
+                        act: 'Act I • The Signpost Hollow',
+                        title: 'The Jubjub Bird’s Bargain',
+                        illustration: 'vorpal_box',
+                        time: 'Mimsy Dusk',
+                        paragraphs: [
+                            'The Jubjub Bird clicks her beak with delight, tucking your brass button into her nest and dropping a crescent-shaped winding key into your palm.',
+                            '"Squawk! Two round boys in sailor collars ran past arguing over a ticking brass box! One shouted ‘Contrariwise!’ and bolted toward the Tumtum Clearing!"'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Tweedledee and Tweedledum! I knew those striped footprints looked familiar!"',
+                            cheshire: '"A music box without a key is merely a paperweight. Good thing you found the key first."',
+                            rabbit: '"Now we just need the box itself before the Jabberwock sneezes sparks onto the ferns!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Head to the clearing to confront Tweedledee & Tweedledum',
+                                statChange: { curiosity: 1 },
+                                next: 'jw_tweedle_clearing'
+                            },
+                            {
+                                text: 'Sneak around the brambles to calm the Bandersnatch first',
+                                statChange: { whimsy: 1 },
+                                next: 'jw_bandersnatch_bramble'
+                            }
+                        ]
+                    },
+                    jw_tweedle_clearing: {
+                        act: 'Act II • The Tumtum Clearing',
+                        title: 'Contrariwise & The Ticking Brass Box',
+                        illustration: 'vorpal_box',
+                        time: 'Wabe-Shadow Hour',
+                        paragraphs: [
+                            'Beside a towering Tumtum tree, Tweedledee and Tweedledum are playing tug-of-war with an ornate, star-engraved brass music box—while an ancient stone rune-pillar hums between them.',
+                            '"It’s my rattle!" insists Tweedledee. "Contrariwise! If it were yours, it wouldn’t play lullabies!" retorts Tweedledum.',
+                            'To break the magical static holding the music box shut, the stone rune-pillar demands you arrange four classic Jabberwocky verse words in their proper poetic sequence!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Recite the poem! Remember: ‘Twas brillig, and the slithy toves... All mimsy were the borogoves... O frabjous day!’"',
+                            cheshire: '"Even nonsense has strict grammar in the Tulgey Wood."',
+                            rabbit: '"Put the words in order quickly so the Tweedles let go of that box!"'
+                        },
+                        puzzle: { type: 'jabberwock_verse' },
+                        choices: [
+                            {
+                                text: 'Claim the Vorpal Music Box once the rune-pillar chimes',
+                                requiresPuzzle: true,
+                                clue: { id: 'jw_music_box', name: 'The Vorpal Lullaby Music Box', desc: 'Engraved with crescent moons; needs only its winding key and a gentle touch.' },
+                                statChange: { curiosity: 1, whimsy: 1 },
+                                next: 'jw_tweedle_parley'
+                            },
+                            {
+                                text: 'Rest beneath the glowing Tumtum tree to listen to the forest whispers',
+                                statChange: { whimsy: 2 },
+                                next: 'jw_tumtum_lost'
+                            }
+                        ]
+                    },
+                    jw_tweedle_parley: {
+                        act: 'Act II • The Tumtum Clearing',
+                        title: 'Two Brothers & One Broken Umbrella',
+                        illustration: 'hat',
+                        time: 'Outgrabe Evening',
+                        paragraphs: [
+                            'As the rune-pillar chimes, the static vanishes and the Tweedles tumble backward onto a cushion of moss, blinking in surprise.',
+                            '"We didn’t mean to wake the big scaly fellow," sniffles Tweedledum. "We only wanted a rattle for our battle!"'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Invite them to tea! Nobody fights when there are scones on the line."',
+                            cheshire: '"You have the music box. Now the Jabberwock’s glade awaits."',
+                            rabbit: '"Let’s hurry past the Bandersnatch before night falls completely!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Broker a peaceful truce between the Tweedles and the Bandersnatch',
+                                archetypeReq: 'cardkeeper',
+                                badge: 'Royal Mediator',
+                                next: 'jw_tweedle_truce'
+                            },
+                            {
+                                text: 'Carry the Vorpal Music Box through the brambles to the Jabberwock’s Glade',
+                                statChange: { curiosity: 1 },
+                                next: 'jw_bandersnatch_bramble'
+                            }
+                        ]
+                    },
+                    jw_bandersnatch_bramble: {
+                        act: 'Act III • The Bramble Thicket',
+                        title: 'Eyes of Flame, Heart of Velvet',
+                        illustration: 'jabberwock',
+                        time: 'Tulgey Midnight',
+                        paragraphs: [
+                            'Stepping past the thorny arch, you enter a cathedral of silver-blue weeping willows. Curled around a nest of fallen autumn leaves is the Jabberwock—its eyes glowing like warm amber lanterns, whiffling softly as tiny sparks drift upward.',
+                            'The Bandersnatch sits beside it like an oversized, anxious sheepdog, nudging the Jabberwock’s snout to comfort it.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Why, he’s no monster—he’s just overtired! Wind up the music box!"',
+                            cheshire: '"A gentle melody tames even the most fearsome reputation."',
+                            rabbit: '"Look how carefully the Bandersnatch watches us. Step forward slowly!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Insert the winding key and play the Vorpal Lullaby for the Jabberwock',
+                                minClues: 2,
+                                badge: 'Requires 2+ Clues',
+                                next: 'jw_befriend'
+                            },
+                            {
+                                text: 'Place the music box gently on a mossy stone and bow in respect',
+                                next: 'jw_vorpal_restored'
+                            },
+                            {
+                                text: 'Call the Tweedles forward to apologize and share woodland tea',
+                                next: 'jw_tweedle_truce'
+                            }
+                        ]
+                    },
+                    jw_befriend: {
+                        act: 'Epilogue • Ending I of IV',
+                        title: 'Ballad of the Gentle Jabberwock',
+                        illustration: 'jabberwock',
+                        time: 'Frabjous Dawn',
+                        isEnding: true,
+                        endingKey: 'jw_befriend',
+                        paragraphs: [
+                            'With a soft click, the crescent key turns and crystal-clear chimes drift across the bioluminescent glade. The Jabberwock lets out a long, contented sigh—like bellows beside a cozy hearth—and rests its chin upon its paws.',
+                            'Before drifting off to sleep, the great creature nudges a shimmering, star-lit scale into your hand, marking you forever as a Friend of the Tulgey Wood.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Callooh! Callay! Who knew the Jabberwock just needed a bedtime tune?"',
+                            cheshire: '"Legends are rarely as fierce as their rhymes."',
+                            rabbit: '"What a magnificent discovery—and not a single whisker singed!"'
+                        },
+                        choices: []
+                    },
+                    jw_vorpal_restored: {
+                        act: 'Epilogue • Ending II of IV',
+                        title: 'Keeper of the Vorpal Lullaby',
+                        illustration: 'vorpal_box',
+                        time: 'Starlit Calm',
+                        isEnding: true,
+                        endingKey: 'jw_vorpal_restored',
+                        paragraphs: [
+                            'Even without every stray clue, your respectful gesture brings peace to the brambles. The Bandersnatch gently nudges the brass box open with its nose, letting the woodland breeze carry the melody through the trees until the Tulgey Wood glows in tranquil harmony.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"A quiet triumph worthy of a poetry recital!"',
+                            cheshire: '"Sometimes wisdom is knowing when not to swing a vorpal blade."',
+                            rabbit: '"Peace at last in the Tulgey Wood!"'
+                        },
+                        choices: []
+                    },
+                    jw_tweedle_truce: {
+                        act: 'Epilogue • Ending III of IV',
+                        title: 'The Great Tweedle-Brother Truce',
+                        illustration: 'hat',
+                        time: 'Tea-Time Truce',
+                        isEnding: true,
+                        endingKey: 'jw_tweedle_truce',
+                        paragraphs: [
+                            'Under a canopy of glowing mushrooms, Tweedledee, Tweedledum, and the Bandersnatch sign a solemn peace treaty written in blackberry ink—agreeing to share rattles, umbrellas, and marshmallow-root tea every Thursday.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Now THAT is proper Wonderland diplomacy!"',
+                            cheshire: '"They’ll be arguing over who signed first by tomorrow, of course."',
+                            rabbit: '"Splendidly resolved!"'
+                        },
+                        choices: []
+                    },
+                    jw_tumtum_lost: {
+                        act: 'Epilogue • Ending IV of IV',
+                        title: 'Daydreaming Beneath the Tumtum Tree',
+                        illustration: 'roses',
+                        time: 'Uffish Reverie',
+                        isEnding: true,
+                        endingKey: 'jw_tumtum_lost',
+                        paragraphs: [
+                            'Leaning back against the warm bark of the Tumtum tree, you let the swaying lanterns and distant lullaby chimes wash over you. In uffish thought you drift into a peaceful daydream, waking safely at the edge of the waking world with firefly dust on your boots.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Sometimes the best adventure is a splendid nap!"',
+                            cheshire: '"We’ll keep the woods tidy until you return."',
+                            rabbit: '"Sleepyhead! Though I suppose there’s no rush today."'
+                        },
+                        choices: []
+                    }
+                }
+            },
+
+            jam_tarts: {
+                id: 'jam_tarts',
+                badge: 'Tale III of IV',
+                title: 'The Great Jam Tart Heist of Hearts',
+                subtitle: 'A Royal Kitchen & Courtroom Whodunit',
+                illustration: 'jam_tart',
+                statusLabel: 'Banquet Countdown',
+                hook: 'On a summer day, the Queen of Hearts baked twelve prize Strawberry Jam Tarts—and every single one vanished from the cooling sill! The Knave of Hearts is in chains, and you have until the banquet gong to find the real culprit.',
+                loreSummary: 'The Knave of Hearts is innocent! The Duchess’s sneezing Cook accidentally knocked the tarts out the window while chasing a pepper-shaker, and the Dormouse quietly caught them in the Treacle Well to save them from garden ants.',
+                startNode: 'jt_royal_kitchen',
+                endings: {
+                    jt_unmask_truth: {
+                        title: 'The Triumph of the Treacle Well',
+                        badge: '🥧 Master Sleuth Ending',
+                        summary: 'You cleared the Knave, recovered all twelve tarts from the Dormouse’s Treacle Well, and exposed the pepper-sneezing mishap!'
+                    },
+                    jt_exonerate_knave: {
+                        title: 'The Knave’s Honor Restored',
+                        badge: '⚖️ Courtroom Justice Ending',
+                        summary: 'With crisp forensic proof, you dismantled the Queen’s shaky trial and won the Knave of Hearts a full royal pardon.'
+                    },
+                    jt_new_recipe: {
+                        title: 'Royal Baker of the Golden Crust',
+                        badge: '👩‍🍳 Culinary Triumph Ending',
+                        summary: 'You whipped up an emergency batch of Lavender-Strawberry Tarts so delicious the Queen forgot she was ever angry!'
+                    },
+                    jt_court_chaos: {
+                        title: 'The Great Tart-Tossing Pandemonium',
+                        badge: '🃏 Slapstick Chaos Ending',
+                        summary: 'When the evidence went sideways, the entire Courtroom of Cards dissolved into a flying flurry of whipped cream and shuffled decks!'
+                    }
+                },
+                nodes: {
+                    jt_royal_kitchen: {
+                        act: 'Act I • The Royal Kitchens',
+                        title: 'Shattered Cooling Racks & Pepper Clouds',
+                        illustration: 'jam_tart',
+                        time: '30 Mins to Banquet',
+                        paragraphs: [
+                            'Clouds of white baking flour and sharp black pepper hang in the air of the Royal Kitchens. Beneath the open pantry window sits an empty silver tray—completely devoid of the Queen’s twelve prize Strawberry Jam Tarts.',
+                            'In the corner, the Knave of Hearts sits handcuffed in oversized velvet shackles, protesting: "I didn’t steal a single crumb! I only came in for a glass of water!"',
+                            'Around the kitchen you spot three intriguing clues: a trail of treacle-sticky pawprints heading toward the garden well, a giant sneeze-splatter of black pepper by the pantry door, and the Knave’s pristine sleeves.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Achoo! Someone used far too much pepper—and look how neat those tiny pawprints are!"',
+                            cheshire: '"The Knave has terribly clean fingers for a supposed jam-thief, wouldn’t you say?"',
+                            rabbit: '"Hurry! The Courtroom of Cards convenes in twenty minutes!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Inspect the Knave’s hands and velvet cuffs for jam smudges',
+                                archetypeReq: 'detective',
+                                badge: 'Forensic Inspection',
+                                clue: { id: 'jt_clean_gloves', name: 'Spotless Velvet Cuffs', desc: 'Not a single drop of strawberry jam or flour on the Knave—proving he never touched the tray!' },
+                                statChange: { curiosity: 2 },
+                                next: 'jt_treacle_well'
+                            },
+                            {
+                                text: 'Examine the black pepper & flour trail near the pantry door',
+                                clue: { id: 'jt_pepper_tin', name: 'Dented Duchess Pepper-Tin', desc: 'Dropped beside the cooling sill right when someone had a colossal sneezing fit.' },
+                                statChange: { curiosity: 1 },
+                                next: 'jt_treacle_well'
+                            },
+                            {
+                                text: 'Follow the sticky treacle pawprints out to the Dormouse’s Treacle Well',
+                                statChange: { whimsy: 1 },
+                                next: 'jt_treacle_well'
+                            }
+                        ]
+                    },
+                    jt_treacle_well: {
+                        act: 'Act II • The Garden Treacle Well',
+                        title: 'Whispers From the Bottom of the Well',
+                        illustration: 'teacup',
+                        time: '15 Mins to Banquet',
+                        paragraphs: [
+                            'At the edge of the kitchen garden stands a mossy stone well brimming with golden treacle. Peering over the rim, you spot the Dormouse perched on a wooden bucket—surrounded by twelve pristine, unharmed Strawberry Jam Tarts!',
+                            '"Shhh!" whispers the Dormouse, adjusting a tiny baker’s cap. "The Duchess’s Cook sneezed so hard the tray flew out the window! I caught all twelve tarts so the garden ants wouldn’t get them!"',
+                            'Before you can haul the bucket up, the White Rabbit’s herald trumpet sounds—and you must match the 3 Kitchen Clues to their true owners in your Detective Ledger so the Court will believe you!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Aha! Match each piece of evidence to who left it behind!"',
+                            cheshire: '"Truth in Wonderland requires proper paperwork—or at least a well-organized ledger."',
+                            rabbit: '"Match the clues quickly so we can bring the tarts straight to the Courtroom!"'
+                        },
+                        puzzle: { type: 'tart_deduction' },
+                        choices: [
+                            {
+                                text: 'Hoist the basket of twelve tarts and march into the Courtroom of Cards',
+                                requiresPuzzle: true,
+                                clue: { id: 'jt_recovered_tarts', name: 'Basket of Twelve Intact Tarts', desc: 'Every single royal tart, saved from ants and glazed with golden treacle.' },
+                                statChange: { curiosity: 2 },
+                                next: 'jt_courtroom'
+                            },
+                            {
+                                text: 'Whip up a brand-new batch of Lavender-Jam Tarts in the kitchen instead',
+                                statChange: { whimsy: 2 },
+                                next: 'jt_new_recipe'
+                            },
+                            {
+                                text: 'Rush into the Courtroom empty-handed and improvise a defense',
+                                next: 'jt_courtroom'
+                            }
+                        ]
+                    },
+                    jt_courtroom: {
+                        act: 'Act III • The Courtroom of Cards',
+                        title: 'All Rise for the King & Queen of Hearts!',
+                        illustration: 'jam_tart',
+                        time: 'Banquet Gong!',
+                        paragraphs: [
+                            'The Courtroom of Cards is packed to the rafters with flamingo bailiffs, guinea-pig jurors, and marching clubs. The King of Hearts adjusts his spectacles over his crown while the Queen pounds her gavel.',
+                            '"Consider your verdict!" she shouts before a single witness has spoken. "Sentence first—verdict afterward!"'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Objection, Your Majesty! You can’t have dessert before the main course!"',
+                            cheshire: '"Now is the moment to present your clues—or watch the cards fly."',
+                            rabbit: '"Step up to the witness stand, quick as a wink!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Present the recovered tarts and your solved deduction ledger to the Court',
+                                minClues: 2,
+                                badge: 'Requires 2+ Clues',
+                                next: 'jt_unmask_truth'
+                            },
+                            {
+                                text: 'Invoke Royal Card-Keeper Law to demand a formal cross-examination',
+                                archetypeReq: 'cardkeeper',
+                                badge: 'Card-Keeper Law',
+                                next: 'jt_exonerate_knave'
+                            },
+                            {
+                                text: 'Toss a meringue pie toward the jury box to create a distraction!',
+                                next: 'jt_court_chaos'
+                            }
+                        ]
+                    },
+                    jt_unmask_truth: {
+                        act: 'Epilogue • Ending I of IV',
+                        title: 'The Triumph of the Treacle Well',
+                        illustration: 'jam_tart',
+                        time: 'Banquet Saved!',
+                        isEnding: true,
+                        endingKey: 'jt_unmask_truth',
+                        paragraphs: [
+                            'With a dramatic flourish, you unveil all twelve Strawberry Jam Tarts—plus a bonus drizzle of golden treacle from the Dormouse’s well—and explain the Cook’s pepper-sneeze mishap.',
+                            'The Knave of Hearts is immediately unchained, the Dormouse receives a medal of honor, and the Queen declares the treacle-glazed tarts the finest batch in Wonderland history!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Justice has never tasted sweeter!"',
+                            cheshire: '"A closed case and an open pastry box."',
+                            rabbit: '"Right on time for the banquet!"'
+                        },
+                        choices: []
+                    },
+                    jt_exonerate_knave: {
+                        act: 'Epilogue • Ending II of IV',
+                        title: 'The Knave’s Honor Restored',
+                        illustration: 'watch',
+                        time: 'Verdict: Innocent',
+                        isEnding: true,
+                        endingKey: 'jt_exonerate_knave',
+                        paragraphs: [
+                            'Citing ancient clauses of the Royal Deck Charter, you prove beyond a shadow of a doubt that the Knave’s cuffs were spotless and no theft occurred. Even the Queen applauds your courtroom mastery, granting the Knave a full pardon.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Brilliant cross-examination!"',
+                            cheshire: '"You out-talked the Queen herself."',
+                            rabbit: '"Order in the court—and peace at last!"'
+                        },
+                        choices: []
+                    },
+                    jt_new_recipe: {
+                        act: 'Epilogue • Ending III of IV',
+                        title: 'Royal Baker of the Golden Crust',
+                        illustration: 'teacup',
+                        time: 'Fresh From the Oven',
+                        isEnding: true,
+                        endingKey: 'jt_new_recipe',
+                        paragraphs: [
+                            'Instead of arguing in court, you roll up your sleeves and bake a dazzling platter of warm Lavender-Strawberry Tarts. The aroma floats straight into the throne room, melting the Queen’s temper and earning you the honorary title of Royal Pastry Chef!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Pass the clotted cream, Chef!"',
+                            cheshire: '"The quickest way to a monarch’s mercy is through flaky pastry."',
+                            rabbit: '"Delicious! Simply delicious!"'
+                        },
+                        choices: []
+                    },
+                    jt_court_chaos: {
+                        act: 'Epilogue • Ending IV of IV',
+                        title: 'The Great Tart-Tossing Pandemonium',
+                        illustration: 'roses',
+                        time: 'Total Pandemonium',
+                        isEnding: true,
+                        endingKey: 'jt_court_chaos',
+                        paragraphs: [
+                            'One airborne meringue sparks a glorious, harmless food fight across the Courtroom of Cards! Guinea pigs cheer, playing cards flutter like confetti, and in the joyful hubbub the Knave slips free while everyone laughs.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Now THAT’S what I call a party!"',
+                            cheshire: '"Chaos suits Wonderland remarkably well."',
+                            rabbit: '"My waistcoat! Oh well—pass a tart!"'
+                        },
+                        choices: []
+                    }
+                }
+            },
+
+            looking_glass: {
+                id: 'looking_glass',
+                badge: 'Tale IV of IV',
+                title: 'Through the Cracked Looking-Glass',
+                subtitle: 'A Chessboard & Mirror-World Odyssey',
+                illustration: 'mirror',
+                statusLabel: 'Chessboard Rank',
+                hook: 'A silver hairline fracture has split the Grand Parlor Mirror—pulling Wonderland’s reflections backward and swapping personalities across the Chessboard Meadows! Cross the eight ranks to seal the glass before reality turns inside out.',
+                loreSummary: 'A fallen silver chess-crown cracked the parlor mirror and swapped traits across the board—turning the fierce Red Queen shy and the gentle White Knight boastful. Restoring the Knight’s L-shaped path and placing the Silver Reflection Prism at the Eighth Rank seals the fracture.',
+                startNode: 'lg_parlor_threshold',
+                endings: {
+                    lg_seal_glass: {
+                        title: 'Mender of the Silver Looking-Glass',
+                        badge: '🪞 True Harmony Ending',
+                        summary: 'You placed the Silver Prism at the Eighth Rank, sealing the mirror fracture and restoring every reflection to its rightful self.'
+                    },
+                    lg_eighth_queen: {
+                        title: 'Crowned Monarch of the Eighth Rank',
+                        badge: '👑 Royal Chess Ending',
+                        summary: 'Advancing across every square of the Chessboard Meadows, you earned a golden crown at the Eighth Square and ruled with wisdom.'
+                    },
+                    lg_swapped_reflections: {
+                        title: 'The Charming Backward-World',
+                        badge: '🔄 Mirror-Twist Ending',
+                        summary: 'Deciding the shy Red Queen and poetic White Knight were happier swapped, you framed the crack in gold as a permanent doorway!'
+                    },
+                    lg_shatter_illusion: {
+                        title: 'Awakening Beyond the Glass',
+                        badge: '✨ Lucid Dreamer Ending',
+                        summary: 'With a tap of your finger, the mirror dissolved into shimmering silver mist, returning you home with a pocketful of starlight.'
+                    }
+                },
+                nodes: {
+                    lg_parlor_threshold: {
+                        act: 'Act I • The Inverted Parlor',
+                        title: 'Where Smoke Rises Downward',
+                        illustration: 'mirror',
+                        time: 'Rank 2 • Starting Square',
+                        paragraphs: [
+                            'Stepping through the spiderweb crack in the Grand Parlor Mirror, you land softly upon a vast landscape divided into emerald and ivory chessboard squares stretching to the horizon.',
+                            'Everything here is delightfully backward: to walk forward you must step away from your destination, and the normally fierce Red Queen is hiding behind a daisy, whispering shyly!',
+                            'Nearby, a glistening shard of silver mirror-glass hums on the turf, while Humpty Dumpty waves precariously from atop a narrow brick wall in the distance.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Careful! In Looking-Glass Land, if you run as fast as you can, you stay in the exact same square!"',
+                            cheshire: '"A cracked mirror makes for cracked personalities. Notice how timid the Red Queen looks today?"',
+                            rabbit: '"We must reach the Eighth Rank Castle before the mirror crack widens!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Pick up the humming Silver Mirror Shard from the ivory square',
+                                clue: { id: 'lg_silver_shard', name: 'Silver Reflection Prism', desc: 'A triangular shard of parlor glass that pulls stray reflections back into alignment.' },
+                                statChange: { curiosity: 1 },
+                                next: 'lg_humpty_wall'
+                            },
+                            {
+                                text: 'Speak gently to the unexpectedly shy Red Queen by the daisies',
+                                archetypeReq: 'cardkeeper',
+                                badge: 'Royal Courtesy',
+                                clue: { id: 'lg_queen_ribbon', name: 'Reversed Velvet Sash', desc: 'The Red Queen’s sash—reading backward, proving her fierce temper swapped with the White Knight!' },
+                                statChange: { whimsy: 1 },
+                                next: 'lg_humpty_wall'
+                            },
+                            {
+                                text: 'Walk backward briskly toward Humpty Dumpty’s Wall',
+                                statChange: { curiosity: 1 },
+                                next: 'lg_humpty_wall'
+                            }
+                        ]
+                    },
+                    lg_humpty_wall: {
+                        act: 'Act II • The Narrow Brick Wall',
+                        title: 'Humpty Dumpty’s Semantic Chessboard',
+                        illustration: 'chess_knight',
+                        time: 'Rank 5 • Mid-Board',
+                        paragraphs: [
+                            'Sitting cross-legged atop his narrow wall, Humpty Dumpty adjusts his cravat with theatrical dignity. "When I use a word," he announces, "it means just what I choose it to mean—and right now, ‘Bridge’ means you must guide the White Knight across this enchanted chessboard!"',
+                            'Below the wall lies a 3x3 Mirror-Chess grid. Because reflections are scrambled, the White Knight can only reach the Golden Crown square by making two classic L-shaped Knight moves!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Two hops forward and one sideways—just like a proper chess knight!"',
+                            cheshire: '"Solve the Knight’s path and Humpty will lower the drawbridge to the Eighth Rank."',
+                            rabbit: '"Step carefully across the squares so we don’t tumble off the board!"'
+                        },
+                        puzzle: { type: 'chess_knight' },
+                        choices: [
+                            {
+                                text: 'Cross the lowered drawbridge toward the Looking-Glass Castle',
+                                requiresPuzzle: true,
+                                clue: { id: 'lg_knight_helm', name: 'White Knight’s Tin Plumage', desc: 'A whimsical gadget-covered crest that points directly toward the mirror’s center.' },
+                                statChange: { curiosity: 2 },
+                                next: 'lg_castle_eighth_rank'
+                            },
+                            {
+                                text: 'Share a peaceful afternoon chatting about poetry with Humpty Dumpty',
+                                statChange: { whimsy: 2 },
+                                next: 'lg_swapped_reflections'
+                            }
+                        ]
+                    },
+                    lg_castle_eighth_rank: {
+                        act: 'Act III • The Eighth-Rank Castle',
+                        title: 'The Throne of Twin Reflections',
+                        illustration: 'mirror',
+                        time: 'Rank 8 • Coronation Square',
+                        paragraphs: [
+                            'At the far edge of the chessboard rises a palace of translucent crystal and polished silver. In the center of the hall hovers the glowing vertical rift of the Grand Parlor Mirror.',
+                            'Beside the rift stand the shy Red Queen and the newly bold White Knight, holding a gleaming golden crown meant for whoever crosses the Eighth Rank.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"You made it to the Eighth Square! That makes you royalty in Looking-Glass rules!"',
+                            cheshire: '"Will you mend the glass, claim the crown, or leave the reflections happily swapped?"',
+                            rabbit: '"The rift is shimmering! Decide quickly before the clock strikes!"'
+                        },
+                        choices: [
+                            {
+                                text: 'Set the Silver Reflection Prism into the rift to seal the mirror',
+                                minClues: 2,
+                                badge: 'Requires 2+ Clues',
+                                next: 'lg_seal_glass'
+                            },
+                            {
+                                text: 'Accept the Golden Crown of the Eighth Rank and rule Looking-Glass Land',
+                                next: 'lg_eighth_queen'
+                            },
+                            {
+                                text: 'Leave the personalities swapped and frame the doorway in gold',
+                                next: 'lg_swapped_reflections'
+                            },
+                            {
+                                text: 'Tap the glass gently to dissolve the illusion and return home',
+                                next: 'lg_shatter_illusion'
+                            }
+                        ]
+                    },
+                    lg_seal_glass: {
+                        act: 'Epilogue • Ending I of IV',
+                        title: 'Mender of the Silver Looking-Glass',
+                        illustration: 'mirror',
+                        time: 'Reflection Restored',
+                        isEnding: true,
+                        endingKey: 'lg_seal_glass',
+                        paragraphs: [
+                            'As you press the Silver Reflection Prism into the fracture, ripples of liquid starlight knit the glass seamlessly back together. Instantly, the Red Queen regains her commanding voice, the White Knight bows humbly, and both thank you for saving their world from turning inside out!'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Not a crack in sight! Clear as a freshly polished teacup!"',
+                            cheshire: '"Balance restored on both sides of the glass."',
+                            rabbit: '"What a relief—now my reflection walks in the same direction I do!"'
+                        },
+                        choices: []
+                    },
+                    lg_eighth_queen: {
+                        act: 'Epilogue • Ending II of IV',
+                        title: 'Crowned Monarch of the Eighth Rank',
+                        illustration: 'chess_knight',
+                        time: 'Checkmate & Coronation',
+                        isEnding: true,
+                        endingKey: 'lg_eighth_queen',
+                        paragraphs: [
+                            'By the ancient laws of the Chessboard Meadows, reaching the Eighth Rank entitles you to a glittering golden crown! Fireworks of silver sparks erupt above the crystal battlements as every chess piece bows to their clever new sovereign.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Long live our newest Monarch! May your reign include extra jam!"',
+                            cheshire: '"From pawn to royalty in a single afternoon."',
+                            rabbit: '"Your Majesty! Right on schedule for the coronation banquet!"'
+                        },
+                        choices: []
+                    },
+                    lg_swapped_reflections: {
+                        act: 'Epilogue • Ending III of IV',
+                        title: 'The Charming Backward-World',
+                        illustration: 'mirror',
+                        time: 'Happily Inverted',
+                        isEnding: true,
+                        endingKey: 'lg_swapped_reflections',
+                        paragraphs: [
+                            'Seeing how much happier the Red Queen is tending daisies—and how much the White Knight enjoys reciting bold heroic poetry—you reinforce the mirror crack with a golden frame, creating a permanent friendly bridge between both worlds.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Why fix what’s wonderfully upside-down?"',
+                            cheshire: '"A mirror-world with far fewer shouts of ‘Off with their heads!’ is an improvement."',
+                            rabbit: '"Everyone seems remarkably cheerful!"'
+                        },
+                        choices: []
+                    },
+                    lg_shatter_illusion: {
+                        act: 'Epilogue • Ending IV of IV',
+                        title: 'Awakening Beyond the Glass',
+                        illustration: 'mirror',
+                        time: 'Waking Parlor',
+                        isEnding: true,
+                        endingKey: 'lg_shatter_illusion',
+                        paragraphs: [
+                            'With a gentle tap of your finger, the silver glass chimes like a harp and melts into harmless mist. You find yourself back in your cozy parlor chair beside an unblemished mirror—save for a tiny silver chess-piece resting on the mantelpiece.'
+                        ],
+                        companionRemarks: {
+                            hatter: '"Until the next time you peek through the glass!"',
+                            cheshire: '"Was it a dream, or did the mirror dream of you?"',
+                            rabbit: '"Safe and sound—and right on time!"'
+                        },
+                        choices: []
+                    }
+                }
+            }
+        };
+
+        // =====================================================================
+        // 4. GAME STATE & PERSISTENCE
+        // =====================================================================
+        const STORAGE_ENDINGS_KEY = 'wonderland_chronicles_endings_v2';
+        const STORAGE_SAVE_KEY = 'wonderland_chronicles_save_v2';
+
+        let gameState = {
+            currentStoryId: 'pocket_watch',
+            archetype: ARCHETYPES[0],
+            companion: COMPANIONS[0],
+            currentNodeId: 'pw_courtyard',
+            curiosity: 7,
+            whimsy: 6,
+            clues: [],
+            solvedPuzzles: {
+                teacups: false,
+                riddle: false,
+                jabberwock_verse: false,
+                tart_deduction: false,
+                chess_knight: false
+            },
+            puzzleTemp: {
+                teacupOrder: [],
+                verseOrder: [],
+                tartMatches: { cuffs: '', pepper: '', bucket: '' },
+                knightPos: 6 // Bottom-left (row 2, col 0) -> hop to 5 (row 1, col 2) -> hop to 0 (row 0, col 0 Crown)
+            },
+            unlockedEndings: JSON.parse(localStorage.getItem(STORAGE_ENDINGS_KEY) || '[]')
+        };
+
+        window.onload = function() {
+            initNarratorEngine();
+            renderStoryHub();
+            updateEndingsBadge();
+        };
+
+        function saveProgress() {
+            try {
+                const payload = {
+                    currentStoryId: gameState.currentStoryId,
+                    archetypeId: gameState.archetype.id,
+                    companionId: gameState.companion.id,
+                    currentNodeId: gameState.currentNodeId,
+                    curiosity: gameState.curiosity,
+                    whimsy: gameState.whimsy,
+                    clues: gameState.clues,
+                    solvedPuzzles: gameState.solvedPuzzles
+                };
+                localStorage.setItem(STORAGE_SAVE_KEY, JSON.stringify(payload));
+            } catch (e) {
+                // Ignore storage quota errors
+            }
+        }
+
+        function clearSavedAdventure() {
+            localStorage.removeItem(STORAGE_SAVE_KEY);
+            renderStoryHub();
+            showToast('Saved bookmark cleared.', '🔖');
+        }
+
+        function resumeSavedAdventure() {
+            try {
+                const raw = localStorage.getItem(STORAGE_SAVE_KEY);
+                if (!raw) return;
+                const saved = JSON.parse(raw);
+                const story = STORIES[saved.currentStoryId];
+                if (!story || !story.nodes[saved.currentNodeId]) return;
+
+                gameState.currentStoryId = saved.currentStoryId;
+                gameState.archetype = ARCHETYPES.find(a => a.id === saved.archetypeId) || ARCHETYPES[0];
+                gameState.companion = COMPANIONS.find(c => c.id === saved.companionId) || COMPANIONS[0];
+                gameState.currentNodeId = saved.currentNodeId;
+                gameState.curiosity = saved.curiosity ?? 6;
+                gameState.whimsy = saved.whimsy ?? 6;
+                gameState.clues = Array.isArray(saved.clues) ? saved.clues : [];
+                gameState.solvedPuzzles = Object.assign({
+                    teacups: false,
+                    riddle: false,
+                    jabberwock_verse: false,
+                    tart_deduction: false,
+                    chess_knight: false
+                }, saved.solvedPuzzles || {});
+                gameState.puzzleTemp = {
+                    teacupOrder: [],
+                    verseOrder: [],
+                    tartMatches: { cuffs: '', pepper: '', bucket: '' },
+                    knightPos: 6
+                };
+
+                switchScreen('game-screen');
+                renderCurrentScene(false);
+                showToast(`Resumed "${story.title}"`, '📖');
+            } catch (e) {
+                showToast('Could not load saved bookmark.', '⚠️');
+            }
+        }
+
+        // =====================================================================
+        // 5. NAVIGATION & HUB / SETUP RENDERERS
+        // =====================================================================
+        function switchScreen(screenId) {
+            ['story-hub-screen', 'setup-screen', 'game-screen'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (id === screenId) el.classList.remove('hidden');
+                    else el.classList.add('hidden');
+                }
+            });
+
+            const narratorPill = document.getElementById('header-narrator-pill');
+            if (narratorPill) {
+                if (screenId === 'game-screen') {
+                    narratorPill.classList.remove('hidden');
+                } else {
+                    narratorPill.classList.add('hidden');
+                    stopNarration();
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openStoryHub() {
+            stopNarration();
+            renderStoryHub();
+            switchScreen('story-hub-screen');
+        }
+
+        function renderStoryHub() {
+            const grid = document.getElementById('stories-grid');
+            if (!grid) return;
+
+            // Check for saved mid-story bookmark
+            const resumeBanner = document.getElementById('resume-save-banner');
+            const rawSave = localStorage.getItem(STORAGE_SAVE_KEY);
+            if (rawSave && resumeBanner) {
+                try {
+                    const saved = JSON.parse(rawSave);
+                    const savedStory = STORIES[saved.currentStoryId];
+                    const savedNode = savedStory && savedStory.nodes[saved.currentNodeId];
+                    if (savedStory && savedNode && !savedNode.isEnding) {
+                        resumeBanner.classList.remove('hidden');
+                        document.getElementById('resume-save-title').textContent = savedStory.title;
+                        document.getElementById('resume-save-meta').textContent = `${savedNode.act} — "${savedNode.title}" (${saved.clues ? saved.clues.length : 0} clues collected)`;
+                    } else {
+                        resumeBanner.classList.add('hidden');
+                    }
+                } catch (e) {
+                    resumeBanner.classList.add('hidden');
+                }
+            } else if (resumeBanner) {
+                resumeBanner.classList.add('hidden');
+            }
+
+            grid.innerHTML = Object.values(STORIES).map(story => {
+                const endingKeys = Object.keys(story.endings);
+                const unlockedCount = endingKeys.filter(k => gameState.unlockedEndings.includes(k)).length;
+
+                return `
+                    <div class="tale-card" onclick="selectStoryForSetup('${story.id}')">
+                        <div>
+                            <div class="tale-card-top">
+                                <div class="tale-emblem">${SVG_ART[story.illustration] || SVG_ART.watch}</div>
+                                <div>
+                                    <div style="display:flex; flex-wrap:wrap; align-items:center; gap:0.4rem; margin-bottom:0.3rem;">
+                                        <span class="badge-pill" style="margin:0; font-size:0.68rem;">${story.badge}</span>
+                                        <span style="font-size:0.78rem; font-weight:700; color:#7e1d26;">Endings: ${unlockedCount}/4</span>
+                                    </div>
+                                    <h3 class="font-display" style="margin:0; font-size:1.15rem; color:#101b33; line-height:1.25;">${story.title}</h3>
+                                    <p style="margin:0.15rem 0 0; font-size:0.88rem; font-style:italic; color:#58483c;">${story.subtitle}</p>
+                                </div>
+                            </div>
+                            <p style="margin:0 0 1rem; font-size:1.02rem; line-height:1.5; color:#221913;">
+                                ${story.hook}
+                            </p>
+                        </div>
+                        <div style="display:flex; justify-content:flex-end;">
+                            <span class="btn btn-emerald" style="font-size:0.82rem;">Enter This Tale &rarr;</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectStoryForSetup(storyId) {
+            const story = STORIES[storyId];
+            if (!story) return;
+            gameState.currentStoryId = storyId;
+
+            document.getElementById('setup-story-badge').textContent = story.badge;
+            document.getElementById('setup-story-art').innerHTML = SVG_ART[story.illustration] || SVG_ART.watch;
+            document.getElementById('setup-story-title').textContent = story.title;
+            document.getElementById('setup-story-hook').textContent = story.hook;
+
+            renderSetupSelections();
+            switchScreen('setup-screen');
+        }
+
+        function renderSetupSelections() {
+            const archContainer = document.getElementById('archetype-cards');
+            const compContainer = document.getElementById('companion-cards');
+
+            archContainer.innerHTML = ARCHETYPES.map(arch => {
+                const isSelected = gameState.archetype.id === arch.id;
+                return `
+                    <div class="select-card ${isSelected ? 'selected' : ''}" onclick="chooseArchetype('${arch.id}')">
+                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.35rem;">
+                            <span style="font-size:1.6rem;">${arch.icon}</span>
+                            ${isSelected ? '<span style="font-size:0.72rem; font-weight:700; color:#e8c563;">✓ SELECTED</span>' : ''}
+                        </div>
+                        <strong class="font-title" style="font-size:1.05rem; display:block;">${arch.name}</strong>
+                        <span style="font-size:0.8rem; font-style:italic; color:${isSelected ? '#e8c563' : '#7e1d26'}; display:block; margin-bottom:0.4rem;">
+                            ${arch.trait}
+                        </span>
+                        <p class="muted-desc" style="margin:0; font-size:0.94rem; line-height:1.4; color:#3d3128;">
+                            ${arch.desc}
+                        </p>
+                    </div>
+                `;
+            }).join('');
+
+            compContainer.innerHTML = COMPANIONS.map(comp => {
+                const isSelected = gameState.companion.id === comp.id;
+                return `
+                    <div class="select-card ${isSelected ? 'selected' : ''}" onclick="chooseCompanion('${comp.id}')">
+                        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.35rem;">
+                            <span style="font-size:1.6rem;">${comp.icon}</span>
+                            ${isSelected ? '<span style="font-size:0.72rem; font-weight:700; color:#e8c563;">✓ SELECTED</span>' : ''}
+                        </div>
+                        <strong class="font-title" style="font-size:1.05rem; display:block;">${comp.name}</strong>
+                        <span style="font-size:0.8rem; font-style:italic; color:${isSelected ? '#e8c563' : '#0f2c22'}; display:block; margin-bottom:0.4rem;">
+                            ${comp.tagline}
+                        </span>
+                        <p class="muted-desc" style="margin:0; font-size:0.94rem; font-style:italic; line-height:1.4; color:#3d3128;">
+                            ${comp.introRemark}
+                        </p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function chooseArchetype(id) {
+            const found = ARCHETYPES.find(a => a.id === id);
+            if (found) {
+                gameState.archetype = found;
+                renderSetupSelections();
+            }
+        }
+
+        function chooseCompanion(id) {
+            const found = COMPANIONS.find(c => c.id === id);
+            if (found) {
+                gameState.companion = found;
+                renderSetupSelections();
+            }
+        }
+
+        function startAdventure() {
+            const story = STORIES[gameState.currentStoryId];
+            if (!story) return;
+
+            gameState.currentNodeId = story.startNode;
+            gameState.curiosity = gameState.archetype.stats.curiosity;
+            gameState.whimsy = gameState.archetype.stats.whimsy;
+            gameState.clues = [];
+            gameState.solvedPuzzles = {
+                teacups: false,
+                riddle: false,
+                jabberwock_verse: false,
+                tart_deduction: false,
+                chess_knight: false
+            };
+            gameState.puzzleTemp = {
+                teacupOrder: [],
+                verseOrder: [],
+                tartMatches: { cuffs: '', pepper: '', bucket: '' },
+                knightPos: 6
+            };
+
+            saveProgress();
+            switchScreen('game-screen');
+            renderCurrentScene(true);
+        }
+
+        // =====================================================================
+        // 6. SCENE RENDERING, HUD UPDATES & CHOICE HANDLING
+        // =====================================================================
+        function addClueIfNew(clueObj) {
+            if (!clueObj) return false;
+            if (gameState.clues.some(c => c.id === clueObj.id)) return false;
+            gameState.clues.push(clueObj);
+            return true;
+        }
+
+        function renderCurrentScene(allowAutoRead = true) {
+            stopNarration();
+
+            const story = STORIES[gameState.currentStoryId];
+            const node = story.nodes[gameState.currentNodeId];
+            if (!node) return;
+
+            // Check if entering this scene grants an automatic clue
+            let newlyFoundClue = null;
+            if (node.clueOnEnter && addClueIfNew(node.clueOnEnter)) {
+                newlyFoundClue = node.clueOnEnter;
+            }
+
+            // Record ending if epilogue reached
+            if (node.isEnding && node.endingKey) {
+                if (!gameState.unlockedEndings.includes(node.endingKey)) {
+                    gameState.unlockedEndings.push(node.endingKey);
+                    localStorage.setItem(STORAGE_ENDINGS_KEY, JSON.stringify(gameState.unlockedEndings));
+                    updateEndingsBadge();
+                    showToast(`New Ending Unlocked: ${node.title}!`, '🏆');
+                }
+                localStorage.removeItem(STORAGE_SAVE_KEY);
+            } else {
+                saveProgress();
+            }
+
+            // Update Left Sidebar HUD
+            document.getElementById('hud-role-name').textContent = gameState.archetype.name;
+            document.getElementById('hud-role-trait').textContent = `Trait: ${gameState.archetype.trait}`;
+            document.getElementById('hud-status-label').textContent = story.statusLabel;
+            document.getElementById('hud-watch-time').textContent = node.time;
+
+            const cClamped = Math.max(0, Math.min(10, gameState.curiosity));
+            const wClamped = Math.max(0, Math.min(10, gameState.whimsy));
+            document.getElementById('hud-curiosity-val').textContent = `${cClamped} / 10`;
+            document.getElementById('hud-curiosity-bar').style.width = `${cClamped * 10}%`;
+            document.getElementById('hud-whimsy-val').textContent = `${wClamped} / 10`;
+            document.getElementById('hud-whimsy-bar').style.width = `${wClamped * 10}%`;
+
+            document.getElementById('hud-companion-avatar').textContent = gameState.companion.icon;
+            document.getElementById('hud-companion-name').textContent = gameState.companion.name;
+            document.getElementById('btn-ask-companion-name').textContent = gameState.companion.name;
+            document.getElementById('hud-companion-remark').textContent =
+                node.companionRemarks[gameState.companion.id] || gameState.companion.introRemark;
+
+            // Update Satchel of Clues
+            document.getElementById('hud-clues-count').textContent = `${gameState.clues.length} Collected`;
+            const cluesListEl = document.getElementById('hud-clues-list');
+            if (gameState.clues.length === 0) {
+                cluesListEl.innerHTML = `<p style="margin:0; font-size:0.88rem; color:rgba(247,239,224,0.65); font-style:italic; text-align:center; padding:0.5rem 0;">Your satchel is empty. Inspect scenes carefully to gather evidence!</p>`;
+            } else {
+                cluesListEl.innerHTML = gameState.clues.map(c => `
+                    <div class="clue-item">
+                        <strong class="font-title" style="color:#e8c563; font-size:0.9rem; display:block;">✦ ${c.name}</strong>
+                        <span style="font-size:0.84rem; color:rgba(247,239,224,0.85); line-height:1.3; display:block;">${c.desc}</span>
+                    </div>
+                `).join('');
+            }
+
+            // Animate Storybook Card
+            const storyCard = document.getElementById('story-card');
+            storyCard.classList.remove('animate-page');
+            void storyCard.offsetWidth;
+            storyCard.classList.add('animate-page');
+
+            document.getElementById('scene-act-label').textContent = node.act;
+            document.getElementById('scene-title').textContent = node.title;
+            document.getElementById('scene-illustration').innerHTML = SVG_ART[node.illustration] || SVG_ART[story.illustration];
+
+            // Clue Notification Banner
+            const clueBanner = document.getElementById('clue-banner');
+            if (newlyFoundClue) {
+                clueBanner.classList.remove('hidden');
+                document.getElementById('clue-banner-text').textContent = `${newlyFoundClue.name} — ${newlyFoundClue.desc}`;
+            } else {
+                clueBanner.classList.add('hidden');
+            }
+
+            // Narrative Paragraphs
+            const narrativeEl = document.getElementById('scene-narrative');
+            narrativeEl.innerHTML = node.paragraphs
+                .map((p, idx) => `<p data-narration-idx="${idx}">${p}</p>`)
+                .join('');
+
+            // Render Mini-Puzzle if present
+            renderScenePuzzle(node);
+
+            // Render Branching Choices or Epilogue Replay Controls
+            renderSceneChoices(node, story);
+
+            if (allowAutoRead && narratorState.autoRead) {
+                setTimeout(() => startSceneNarration(), 250);
+            }
+        }
+
+        function renderSceneChoices(node, story) {
+            const choicesEl = document.getElementById('choices-container');
+
+            if (node.isEnding) {
+                const endingKeys = Object.keys(story.endings);
+                const unlockedInTale = endingKeys.filter(k => gameState.unlockedEndings.includes(k)).length;
+                choicesEl.innerHTML = `
+                    <div style="text-align:center; padding:0.75rem; background:rgba(15,44,34,0.1); border-radius:0.85rem; border:1px solid #c59b27;">
+                        <p style="margin:0 0 0.85rem; font-family:var(--font-title); font-size:1.05rem; color:#0f2c22;">
+                            You have unlocked <strong>${unlockedInTale} of 4</strong> endings in <em>${story.title}</em>.
+                        </p>
+                        <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:0.65rem;">
+                            <button type="button" class="btn btn-emerald" onclick="startAdventure()">
+                                🔄 Replay This Tale for Another Ending
+                            </button>
+                            <button type="button" class="btn btn-crimson" onclick="openStoryHub()">
+                                📚 Choose Another Wonderland Tale
+                            </button>
+                            <button type="button" class="btn btn-velvet" onclick="openEndingsModal()">
+                                🏆 View All Endings (${gameState.unlockedEndings.length}/16)
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            const puzzleLocked = node.puzzle && !gameState.solvedPuzzles[node.puzzle.type];
+
+            choicesEl.innerHTML = node.choices.map((choice, idx) => {
+                // Filter archetype-exclusive choices that don't match
+                if (choice.archetypeReq && choice.archetypeReq !== gameState.archetype.id) {
+                    return '';
+                }
+                if (choice.minCuriosity && gameState.curiosity < choice.minCuriosity) {
+                    return '';
+                }
+
+                let disabled = false;
+                let tagText = choice.badge || '';
+
+                if (choice.requiresPuzzle && puzzleLocked) {
+                    disabled = true;
+                    tagText = '🔒 Solve Puzzle Above First';
+                } else if (choice.minClues && gameState.clues.length < choice.minClues) {
+                    disabled = true;
+                    tagText = `🔒 Needs ${choice.minClues}+ Clues (You have ${gameState.clues.length})`;
+                } else if (choice.clue && !gameState.clues.some(c => c.id === choice.clue.id)) {
+                    tagText = tagText || '🗝️ Uncovers Clue';
+                }
+
+                const extraClass = choice.archetypeReq ? 'special-role' : (choice.clue || choice.minClues ? 'special-clue' : '');
+
+                return `
+                    <button type="button" class="choice-btn ${extraClass}" ${disabled ? 'disabled' : ''} onclick="selectChoice(${idx})">
+                        <span>${choice.text}</span>
+                        ${tagText ? `<span class="choice-tag">${tagText}</span>` : ''}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function selectChoice(choiceIdx) {
+            const story = STORIES[gameState.currentStoryId];
+            const node = story.nodes[gameState.currentNodeId];
+            const choice = node.choices[choiceIdx];
+            if (!choice) return;
+
+            if (choice.statChange) {
+                if (choice.statChange.curiosity) gameState.curiosity += choice.statChange.curiosity;
+                if (choice.statChange.whimsy) gameState.whimsy += choice.statChange.whimsy;
+            }
+
+            if (choice.clue && addClueIfNew(choice.clue)) {
+                showToast(`Clue Found: ${choice.clue.name}`, '🗝️');
+            }
+
+            gameState.currentNodeId = choice.next;
+            renderCurrentScene(true);
+        }
+
+        // =====================================================================
+        // 7. ALL 5 INTERACTIVE MINI-PUZZLES
+        // =====================================================================
+        function renderScenePuzzle(node) {
+            const container = document.getElementById('puzzle-container');
+            if (!node.puzzle) {
+                container.classList.add('hidden');
+                container.innerHTML = '';
+                return;
+            }
+
+            container.classList.remove('hidden');
+            const type = node.puzzle.type;
+            const isSolved = !!gameState.solvedPuzzles[type];
+
+            // PUZZLE 1: Enchanted Teacups Chronological Order (Tale I)
+            if (type === 'teacups') {
+                const cups = [
+                    { id: 'cup_600', label: '🫖 6:00 Chamomile (First)' },
+                    { id: 'cup_615', label: '🍵 6:15 Earl Grey (Second)' },
+                    { id: 'cup_630', label: '☕ 6:30 Darjeeling (Third)' }
+                ];
+                // Display shuffled buttons so player orders 6:00 -> 6:15 -> 6:30
+                const displayOrder = [cups[1], cups[2], cups[0]];
+                const selected = gameState.puzzleTemp.teacupOrder;
+
+                container.innerHTML = `
+                    <strong class="font-title" style="color:#0f2c22; font-size:1.05rem; display:block; margin-bottom:0.35rem;">
+                        🧩 Enchanted Tea-Table Puzzle ${isSolved ? '— ✅ Time Stabilized!' : ''}
+                    </strong>
+                    <p style="margin:0 0 0.65rem; font-size:0.98rem;">
+                        Tap the three enchanted teacups in strict chronological order from earliest (<strong>6:00</strong>) to latest (<strong>6:30</strong>):
+                    </p>
+                    <div class="puzzle-tile-grid">
+                        ${displayOrder.map(cup => {
+                            const pos = selected.indexOf(cup.id);
+                            return `
+                                <button type="button" class="puzzle-tile ${pos !== -1 || isSolved ? 'selected-tile' : ''}" ${isSolved ? 'disabled' : ''} onclick="pickTeacup('${cup.id}')">
+                                    ${cup.label}
+                                    ${isSolved ? '<br><small>✓ Aligned</small>' : (pos !== -1 ? `<br><small>Step #${pos + 1}</small>` : '')}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${!isSolved && selected.length > 0 ? `<button type="button" class="btn btn-velvet" style="font-size:0.78rem;" onclick="resetTeacupPuzzle()">Reset Teacups</button>` : ''}
+                `;
+            }
+
+            // PUZZLE 2: Speaking Brass Lock Riddle (Tale I)
+            else if (type === 'riddle') {
+                const options = [
+                    { id: 'teapot', label: '🫖 A Silver Teapot' },
+                    { id: 'clock', label: '🕰️ A Clock or Watch' },
+                    { id: 'flamingo', label: '🦩 A Croquet Flamingo' },
+                    { id: 'cheshire', label: '😸 The Cheshire Cat' }
+                ];
+                container.innerHTML = `
+                    <strong class="font-title" style="color:#0f2c22; font-size:1.05rem; display:block; margin-bottom:0.35rem;">
+                        🔐 The Speaking Brass Lock ${isSolved ? '— ✅ Gate Unlocked!' : ''}
+                    </strong>
+                    <p style="margin:0 0 0.65rem; font-size:1rem; font-style:italic;">
+                        "I have two hands and a round pale face, yet I never hold a teacup nor crack a smile. What am I?"
+                    </p>
+                    <div class="puzzle-tile-grid">
+                        ${options.map(opt => `
+                            <button type="button" class="puzzle-tile ${isSolved && opt.id === 'clock' ? 'selected-tile' : ''}" ${isSolved ? 'disabled' : ''} onclick="answerBrassRiddle('${opt.id}')">
+                                ${opt.label}
+                            </button>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // PUZZLE 3: Jabberwocky Verse Cipher (Tale II)
+            else if (type === 'jabberwock_verse') {
+                const words = [
+                    { id: 'Brillig', label: '✨ Brillig (Verse 1)' },
+                    { id: 'Slithy', label: '🌿 Slithy (Verse 2)' },
+                    { id: 'Mimsy', label: '🕊️ Mimsy (Verse 3)' },
+                    { id: 'Frabjous', label: '🌟 Frabjous (Finale)' }
+                ];
+                const displayWords = [words[2], words[0], words[3], words[1]];
+                const selected = gameState.puzzleTemp.verseOrder;
+
+                container.innerHTML = `
+                    <strong class="font-title" style="color:#0f2c22; font-size:1.05rem; display:block; margin-bottom:0.35rem;">
+                        📜 Jabberwocky Rune-Pillar Cipher ${isSolved ? '— ✅ Rune Unlocked!' : ''}
+                    </strong>
+                    <p style="margin:0 0 0.65rem; font-size:0.98rem;">
+                        Tap the four nonsense words in their poem order: <em>"'Twas <strong>Brillig</strong>, and the <strong>Slithy</strong> toves... All <strong>Mimsy</strong> were the borogoves... O <strong>Frabjous</strong> day!"</em>
+                    </p>
+                    <div class="puzzle-tile-grid">
+                        ${displayWords.map(w => {
+                            const pos = selected.indexOf(w.id);
+                            return `
+                                <button type="button" class="puzzle-tile ${pos !== -1 || isSolved ? 'selected-tile' : ''}" ${isSolved ? 'disabled' : ''} onclick="pickJabberwockWord('${w.id}')">
+                                    ${w.label}
+                                    ${isSolved ? '<br><small>✓ Chanted</small>' : (pos !== -1 ? `<br><small>#${pos + 1}</small>` : '')}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                    ${!isSolved && selected.length > 0 ? `<button type="button" class="btn btn-velvet" style="font-size:0.78rem;" onclick="resetVersePuzzle()">Reset Words</button>` : ''}
+                `;
+            }
+
+            // PUZZLE 4: Royal Kitchen Deduction Ledger (Tale III)
+            else if (type === 'tart_deduction') {
+                const m = gameState.puzzleTemp.tartMatches;
+                container.innerHTML = `
+                    <strong class="font-title" style="color:#0f2c22; font-size:1.05rem; display:block; margin-bottom:0.35rem;">
+                        📒 Royal Kitchen Deduction Ledger ${isSolved ? '— ✅ Case Solved!' : ''}
+                    </strong>
+                    <p style="margin:0 0 0.7rem; font-size:0.98rem;">
+                        Match each piece of kitchen evidence to its true owner so the Courtroom of Cards will believe your testimony:
+                    </p>
+                    <div class="ledger-row">
+                        <span><strong>1. Spotless Velvet Cuffs</strong> (Zero jam stains)</span>
+                        <select class="ledger-select" ${isSolved ? 'disabled' : ''} onchange="updateTartMatch('cuffs', this.value)">
+                            <option value="">-- Choose Suspect --</option>
+                            <option value="knave" ${m.cuffs === 'knave' || isSolved ? 'selected' : ''}>Innocent Knave of Hearts</option>
+                            <option value="cook" ${m.cuffs === 'cook' ? 'selected' : ''}>Duchess's Sneezing Cook</option>
+                            <option value="dormouse" ${m.cuffs === 'dormouse' ? 'selected' : ''}>Helpful Dormouse</option>
+                        </select>
+                    </div>
+                    <div class="ledger-row">
+                        <span><strong>2. Dented Black Pepper-Tin</strong> (By the sill)</span>
+                        <select class="ledger-select" ${isSolved ? 'disabled' : ''} onchange="updateTartMatch('pepper', this.value)">
+                            <option value="">-- Choose Suspect --</option>
+                            <option value="knave" ${m.pepper === 'knave' ? 'selected' : ''}>Innocent Knave of Hearts</option>
+                            <option value="cook" ${m.pepper === 'cook' || isSolved ? 'selected' : ''}>Duchess's Sneezing Cook</option>
+                            <option value="dormouse" ${m.pepper === 'dormouse' ? 'selected' : ''}>Helpful Dormouse</option>
+                        </select>
+                    </div>
+                    <div class="ledger-row">
+                        <span><strong>3. Golden Treacle Bucket</strong> (Twelve safe tarts)</span>
+                        <select class="ledger-select" ${isSolved ? 'disabled' : ''} onchange="updateTartMatch('bucket', this.value)">
+                            <option value="">-- Choose Suspect --</option>
+                            <option value="knave" ${m.bucket === 'knave' ? 'selected' : ''}>Innocent Knave of Hearts</option>
+                            <option value="cook" ${m.bucket === 'cook' ? 'selected' : ''}>Duchess's Sneezing Cook</option>
+                            <option value="dormouse" ${m.bucket === 'dormouse' || isSolved ? 'selected' : ''}>Helpful Dormouse</option>
+                        </select>
+                    </div>
+                    ${!isSolved ? `<button type="button" class="btn btn-emerald" style="margin-top:0.5rem;" onclick="verifyTartLedger()">Verify Deduction Ledger</button>` : ''}
+                `;
+            }
+
+            // PUZZLE 5: Looking-Glass Knight's Tour (Tale IV)
+            else if (type === 'chess_knight') {
+                // 3x3 grid indices 0..8:
+                // 0 (Crown Goal), 1, 2
+                // 3,              4, 5 (Valid L-move from 6!)
+                // 6 (Start),      7, 8
+                const knightPos = isSolved ? 0 : gameState.puzzleTemp.knightPos;
+                const cells = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(idx => {
+                    const isDark = idx % 2 === 1;
+                    const isKnight = idx === knightPos;
+                    const isCrown = idx === 0;
+                    let label = '';
+                    if (isKnight) label = '♞<br>Knight';
+                    else if (isCrown) label = '👑<br>Crown';
+                    else label = `Sq ${idx + 1}`;
+
+                    return `
+                        <button type="button" class="chess-cell ${isDark ? 'dark-sq' : 'light-sq'} ${isKnight ? 'knight-here' : ''} ${isCrown ? 'goal-sq' : ''}" ${isSolved ? 'disabled' : ''} onclick="moveChessKnight(${idx})">
+                            ${label}
+                        </button>
+                    `;
+                }).join('');
+
+                container.innerHTML = `
+                    <strong class="font-title" style="color:#0f2c22; font-size:1.05rem; display:block; margin-bottom:0.35rem;">
+                        ♞ Looking-Glass Knight's Tour ${isSolved ? '— ✅ Drawbridge Lowered!' : ''}
+                    </strong>
+                    <p style="margin:0 0 0.5rem; font-size:0.96rem;">
+                        Guide the White Knight (<strong>♞</strong>) to the Golden Crown (<strong>👑</strong>) using valid <strong>L-shaped chess moves</strong> (2 squares one direction, 1 square perpendicular):
+                    </p>
+                    <div class="chess-grid">${cells}</div>
+                    ${!isSolved ? `<div style="text-align:center;"><button type="button" class="btn btn-velvet" style="font-size:0.78rem;" onclick="resetChessKnight()">Reset Knight to Start</button></div>` : ''}
+                `;
+            }
+        }
+
+        // Puzzle 1 Handlers
+        function pickTeacup(cupId) {
+            const arr = gameState.puzzleTemp.teacupOrder;
+            if (arr.includes(cupId)) return;
+            arr.push(cupId);
+
+            if (arr.length === 3) {
+                if (arr[0] === 'cup_600' && arr[1] === 'cup_615' && arr[2] === 'cup_630') {
+                    gameState.solvedPuzzles.teacups = true;
+                    showToast('The three teacups chime in harmony—time is stabilized!', '🫖');
+                } else {
+                    gameState.puzzleTemp.teacupOrder = [];
+                    showToast('The tea leaps back into the spout! Try ordering from 6:00 to 6:30.', '⏳');
+                }
+            }
+            renderCurrentScene(false);
+        }
+        function resetTeacupPuzzle() {
+            gameState.puzzleTemp.teacupOrder = [];
+            renderCurrentScene(false);
+        }
+
+        // Puzzle 2 Handler
+        function answerBrassRiddle(answerId) {
+            if (answerId === 'clock') {
+                gameState.solvedPuzzles.riddle = true;
+                showToast('The Speaking Brass Lock clicks open with a resonant chime!', '🔐');
+                renderCurrentScene(false);
+            } else {
+                showToast('"Not quite!" chuckles the Brass Lock. "Think of hands and a face that ticks!"', '🕰️');
+            }
+        }
+
+        // Puzzle 3 Handlers
+        function pickJabberwockWord(word) {
+            const arr = gameState.puzzleTemp.verseOrder;
+            if (arr.includes(word)) return;
+            arr.push(word);
+
+            if (arr.length === 4) {
+                if (arr[0] === 'Brillig' && arr[1] === 'Slithy' && arr[2] === 'Mimsy' && arr[3] === 'Frabjous') {
+                    gameState.solvedPuzzles.jabberwock_verse = true;
+                    showToast('The rune-pillar glows violet and releases the Vorpal Music Box!', '📜');
+                } else {
+                    gameState.puzzleTemp.verseOrder = [];
+                    showToast('The runes fizzle! Remember: Brillig → Slithy → Mimsy → Frabjous.', '✨');
+                }
+            }
+            renderCurrentScene(false);
+        }
+        function resetVersePuzzle() {
+            gameState.puzzleTemp.verseOrder = [];
+            renderCurrentScene(false);
+        }
+
+        // Puzzle 4 Handlers
+        function updateTartMatch(key, val) {
+            gameState.puzzleTemp.tartMatches[key] = val;
+        }
+        function verifyTartLedger() {
+            const m = gameState.puzzleTemp.tartMatches;
+            if (m.cuffs === 'knave' && m.pepper === 'cook' && m.bucket === 'dormouse') {
+                gameState.solvedPuzzles.tart_deduction = true;
+                showToast('Every clue aligns! Your Detective Ledger is airtight!', '🥧');
+                renderCurrentScene(false);
+            } else {
+                showToast('One or more ledger entries do not match the kitchen clues. Check again!', '🔎');
+            }
+        }
+
+        // Puzzle 5 Handlers
+        function moveChessKnight(targetIdx) {
+            const cur = gameState.puzzleTemp.knightPos;
+            const r1 = Math.floor(cur / 3), c1 = cur % 3;
+            const r2 = Math.floor(targetIdx / 3), c2 = targetIdx % 3;
+            const dr = Math.abs(r1 - r2);
+            const dc = Math.abs(c1 - c2);
+
+            if ((dr === 2 && dc === 1) || (dr === 1 && dc === 2)) {
+                gameState.puzzleTemp.knightPos = targetIdx;
+                if (targetIdx === 0) {
+                    gameState.solvedPuzzles.chess_knight = true;
+                    showToast('Checkmate! Humpty Dumpty lowers the drawbridge!', '♞');
+                }
+                renderCurrentScene(false);
+            } else {
+                showToast('A Chess Knight must leap in an L-shape (2 squares one way, 1 square across)!', '♟️');
+            }
+        }
+        function resetChessKnight() {
+            gameState.puzzleTemp.knightPos = 6;
+            renderCurrentScene(false);
+        }
+
+        // =====================================================================
+        // 8. INSTANT IN-CHARACTER LOOKING GLASS ORACLE (100% OFFLINE)
+        // =====================================================================
+        function openLookingGlassModal() {
+            stopNarration();
+            document.getElementById('modal-companion-icon').textContent = gameState.companion.icon;
+            document.getElementById('modal-companion-title').textContent = `Consult ${gameState.companion.name}`;
+            document.getElementById('looking-glass-modal').classList.remove('hidden');
+        }
+
+        function closeLookingGlassModal() {
+            stopNarration();
+            document.getElementById('looking-glass-modal').classList.add('hidden');
+        }
+
+        function askLookingGlass(presetQuestion) {
+            const inputEl = document.getElementById('looking-glass-input');
+            if (presetQuestion) {
+                inputEl.value = presetQuestion;
+            }
+            const question = inputEl.value.trim();
+            if (!question) {
+                showToast('Whisper a question or theory into the Looking Glass first!', '🔮');
+                return;
+            }
+
+            const reply = generateCompanionOracleReply(question);
+            const box = document.getElementById('looking-glass-response-box');
+            const answerEl = document.getElementById('looking-glass-answer');
+            box.classList.remove('hidden');
+            answerEl.textContent = reply;
+
+            if (narratorState.readOracle) {
+                speakLookingGlassAnswer();
+            }
+        }
+
+        function generateCompanionOracleReply(question) {
+            const story = STORIES[gameState.currentStoryId];
+            const node = story.nodes[gameState.currentNodeId];
+            const compId = gameState.companion.id;
+            const q = question.toLowerCase();
+            const clueCount = gameState.clues.length;
+            const clueNames = gameState.clues.map(c => c.name);
+
+            const openers = {
+                hatter: 'Aha! Tap the brim of my 10/6 hat and peer into the mercury—',
+                cheshire: 'My grin widens at that thought, clever investigator—',
+                rabbit: 'Oh my fur and whiskers! Let me check my pocket ledger quickly—'
+            };
+            const opener = openers[compId] || openers.hatter;
+
+            // Active unsolved puzzle hint
+            if (node.puzzle && !gameState.solvedPuzzles[node.puzzle.type]) {
+                const hints = {
+                    teacups: 'Arrange the three enchanted teacups in chronological order from earliest to latest: 6:00 Chamomile first, 6:15 Earl Grey second, and 6:30 Darjeeling third!',
+                    riddle: 'The Brass Lock is describing a timepiece with two hands and a round face that never smiles: choose "A Clock or Watch"!',
+                    jabberwock_verse: 'Tap the Jabberwocky words in poem order: Brillig → Slithy → Mimsy → Frabjous!',
+                    tart_deduction: 'Match Spotless Velvet Cuffs to the Innocent Knave, Dented Pepper-Tin to the Duchess’s Cook, and Golden Treacle Bucket to the Helpful Dormouse!',
+                    chess_knight: 'Move the White Knight in two L-shaped hops: first leap to the middle-right square (Sq 6), then leap directly onto the top-left Golden Crown (Sq 1)!'
+                };
+                if (hints[node.puzzle.type]) {
+                    return `"${opener} ${hints[node.puzzle.type]}"`;
+                }
+            }
+
+            // Clue inspection
+            if (q.includes('clue') || q.includes('satchel') || q.includes('evidence') || q.includes('inspect')) {
+                if (clueCount === 0) {
+                    return `"${opener} Your satchel is currently as empty as an unpoured teapot! Inspect objects in each scene—gathering 2 or more clues unlocks the strongest ending."`;
+                }
+                const note = clueCount >= 2
+                    ? 'You already hold enough evidence to unlock the primary resolution of this tale!'
+                    : 'Collect just one more clue so your final case is airtight!';
+                return `"${opener} You are carrying ${clueNames.join(' and ')}. ${note}"`;
+            }
+
+            // Mystery theory / culprit
+            if (q.includes('who') || q.includes('behind') || q.includes('theory') || q.includes('culprit')) {
+                const secrets = {
+                    pocket_watch: 'The Knave of Hearts tried to steal the watch using magnet-laced tart oil to frame the White Rabbit, while the Rabbit grabbed it to keep it safe before dropping it into Father Time’s Clockwork Vault!',
+                    jabberwock: 'The Jabberwock isn’t fierce at all—it merely cannot sleep without its stolen "Vorpal Lullaby" music box, which Tweedledee and Tweedledum mistook for a rattle!',
+                    jam_tarts: 'The Knave is innocent! A pepper-induced sneeze from the Duchess’s Cook sent the tray flying out the window, and the Dormouse caught all twelve tarts in the Treacle Well to keep them safe!',
+                    looking_glass: 'A cracked parlor mirror swapped personalities across the Chessboard Meadows—turning the Red Queen shy and the White Knight bold. Placing the Silver Reflection Prism at the Eighth Rank mends the glass!'
+                };
+                return `"${opener} ${secrets[story.id]}"`;
+            }
+
+            // Default contextual hint
+            const remark = (node.companionRemarks[compId] || gameState.companion.introRemark).replace(/^["“]|["”]$/g, '');
+            return `"${opener} ${remark} You currently hold ${clueCount} clue${clueCount === 1 ? '' : 's'} in ${node.act}."`;
+        }
+
+        // =====================================================================
+        // 9. ENDINGS MODAL, INSTALL MODAL & TOASTS
+        // =====================================================================
+        function updateEndingsBadge() {
+            const total = gameState.unlockedEndings.length;
+            const badge = document.getElementById('header-endings-badge');
+            if (badge) badge.textContent = `Endings (${total}/16)`;
+        }
+
+        function openEndingsModal() {
+            stopNarration();
+            const listEl = document.getElementById('endings-list-container');
+            listEl.innerHTML = Object.values(STORIES).map(story => {
+                const cards = Object.entries(story.endings).map(([key, info]) => {
+                    const unlocked = gameState.unlockedEndings.includes(key);
+                    return `
+                        <div style="padding:0.75rem; border-radius:0.75rem; border:1.5px solid ${unlocked ? '#c59b27' : '#b8ad96'}; background:${unlocked ? '#101b33' : 'rgba(0,0,0,0.06)'}; color:${unlocked ? '#f7efe0' : '#4a4036'};">
+                            <span style="font-size:0.72rem; font-weight:700; text-transform:uppercase; color:${unlocked ? '#e8c563' : '#7a6e60'}; display:block;">
+                                ${unlocked ? info.badge : '🔒 Locked Ending'}
+                            </span>
+                            <strong class="font-title" style="font-size:0.98rem; display:block; margin:0.15rem 0;">
+                                ${unlocked ? info.title : '??? Undiscovered Chapter ???'}
+                            </strong>
+                            <p style="margin:0; font-size:0.88rem; line-height:1.35; opacity:0.9;">
+                                ${unlocked ? info.summary : 'Explore different choices in this tale to unlock this ending.'}
+                            </p>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div style="border-top:1.5px solid rgba(197,155,39,0.5); padding-top:0.75rem;">
+                        <h4 class="font-display" style="margin:0 0 0.55rem; font-size:1.05rem; color:#101b33;">${story.badge}: ${story.title}</h4>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:0.6rem;">${cards}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('endings-modal').classList.remove('hidden');
+        }
+
+        function closeEndingsModal() {
+            document.getElementById('endings-modal').classList.add('hidden');
+        }
+
+        function openInstallModal() {
+            document.getElementById('install-guide-modal').classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('install-guide-modal').classList.add('hidden');
+        }
+
+        let toastTimeout = null;
+        function showToast(msg, icon = '🕰️') {
+            const box = document.getElementById('toast-box');
+            document.getElementById('toast-icon').textContent = icon;
+            document.getElementById('toast-message').textContent = msg;
+            box.classList.remove('hidden');
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => box.classList.add('hidden'), 3800);
+        }
+
+        // =====================================================================
+        // 10. WEB SPEECH API READ-ALOUD NARRATOR ENGINE
+        // =====================================================================
+        const narratorState = {
+            supported: typeof window !== 'undefined' && 'speechSynthesis' in window,
+            voices: [],
+            selectedVoiceURI: localStorage.getItem('wc_narrator_voice') || '',
+            rate: parseFloat(localStorage.getItem('wc_narrator_rate') || '1.0'),
+            autoRead: localStorage.getItem('wc_narrator_autoread') === 'true',
+            readChoices: localStorage.getItem('wc_narrator_choices') === 'true',
+            readOracle: localStorage.getItem('wc_narrator_oracle') !== 'false',
+            isSpeaking: false,
+            isPaused: false,
+            queue: [],
+            queueIndex: 0,
+            token: 0
+        };
+
+        function initNarratorEngine() {
+            updateAutoReadUI();
+            updateSpeedButtonsUI();
+            const chkChoices = document.getElementById('chk-read-choices');
+            const chkOracle = document.getElementById('chk-read-oracle');
+            if (chkChoices) chkChoices.checked = narratorState.readChoices;
+            if (chkOracle) chkOracle.checked = narratorState.readOracle;
+
+            if (!narratorState.supported) return;
+
+            loadNarratorVoices();
+            if (typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+                window.speechSynthesis.onvoiceschanged = loadNarratorVoices;
+            }
+
+            document.addEventListener('click', (e) => {
+                const pop = document.getElementById('narrator-popover');
+                const btn = document.getElementById('btn-narrator-settings');
+                if (pop && !pop.classList.contains('hidden') && !pop.contains(e.target) && !btn.contains(e.target)) {
+                    closeNarratorPopover();
+                }
+            });
+
+            window.addEventListener('beforeunload', stopNarration);
+        }
+
+        function loadNarratorVoices() {
+            if (!narratorState.supported) return;
+            const all = window.speechSynthesis.getVoices() || [];
+            const english = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+            narratorState.voices = english.length > 0 ? english : all;
+
+            const select = document.getElementById('narrator-voice-select');
+            if (!select || narratorState.voices.length === 0) return;
+
+            if (!narratorState.selectedVoiceURI || !narratorState.voices.some(v => v.voiceURI === narratorState.selectedVoiceURI)) {
+                const preferred =
+                    narratorState.voices.find(v => /en-GB|British|UK English|Daniel|Arthur|George|Hazel|Serena|Kate/i.test(`${v.name} ${v.lang}`)) ||
+                    narratorState.voices[0];
+                if (preferred) narratorState.selectedVoiceURI = preferred.voiceURI;
+            }
+
+            select.innerHTML = narratorState.voices.map(v =>
+                `<option value="${v.voiceURI}" ${v.voiceURI === narratorState.selectedVoiceURI ? 'selected' : ''}>${v.name} (${v.lang})</option>`
+            ).join('');
+        }
+
+        function toggleNarratorPopover(e) {
+            if (e) e.stopPropagation();
+            document.getElementById('narrator-popover').classList.toggle('hidden');
+        }
+
+        function closeNarratorPopover() {
+            document.getElementById('narrator-popover').classList.add('hidden');
+        }
+
+        function changeNarratorVoice(uri) {
+            narratorState.selectedVoiceURI = uri;
+            localStorage.setItem('wc_narrator_voice', uri);
+        }
+
+        function setNarratorRate(rate) {
+            narratorState.rate = rate;
+            localStorage.setItem('wc_narrator_rate', String(rate));
+            updateSpeedButtonsUI();
+        }
+
+        function updateSpeedButtonsUI() {
+            document.querySelectorAll('.speed-opt-btn').forEach(btn => {
+                const r = parseFloat(btn.getAttribute('data-rate'));
+                btn.className = Math.abs(r - narratorState.rate) < 0.01
+                    ? 'btn btn-emerald speed-opt-btn'
+                    : 'btn btn-velvet speed-opt-btn';
+            });
+        }
+
+        function toggleAutoRead() {
+            narratorState.autoRead = !narratorState.autoRead;
+            localStorage.setItem('wc_narrator_autoread', String(narratorState.autoRead));
+            updateAutoReadUI();
+            showToast(narratorState.autoRead ? 'Auto-Read enabled for new chapters.' : 'Auto-Read turned off.', '🎙️');
+        }
+
+        function updateAutoReadUI() {
+            const dot = document.getElementById('auto-read-dot');
+            const label = document.getElementById('auto-read-label');
+            if (!dot || !label) return;
+            if (narratorState.autoRead) {
+                dot.classList.add('active');
+                label.textContent = 'On';
+            } else {
+                dot.classList.remove('active');
+                label.textContent = 'Off';
+            }
+        }
+
+        function toggleNarratorOption(key, val) {
+            narratorState[key] = val;
+            localStorage.setItem(key === 'readChoices' ? 'wc_narrator_choices' : 'wc_narrator_oracle', String(val));
+        }
+
+        function previewNarratorVoice() {
+            if (!narratorState.supported) {
+                showToast('Text-to-speech is unavailable in this browser.', '🔇');
+                return;
+            }
+            speakQueue([{ text: 'Welcome to Wonderland Chronicles. Shall we follow the White Rabbit, or consult the Looking Glass?', paraIdx: -1 }]);
+        }
+
+        function toggleSceneNarration() {
+            if (!narratorState.supported) {
+                showToast('Text-to-speech is unavailable in this browser.', '🔇');
+                return;
+            }
+            if (narratorState.isSpeaking && !narratorState.isPaused) {
+                window.speechSynthesis.pause();
+                narratorState.isPaused = true;
+                updateNarrationButtonsUI();
+            } else if (narratorState.isSpeaking && narratorState.isPaused) {
+                window.speechSynthesis.resume();
+                narratorState.isPaused = false;
+                updateNarrationButtonsUI();
+            } else {
+                startSceneNarration();
+            }
+        }
+
+        function startSceneNarration() {
+            const story = STORIES[gameState.currentStoryId];
+            const node = story.nodes[gameState.currentNodeId];
+            if (!node) return;
+
+            const segments = [{ text: `${node.act}. ${node.title}.`, paraIdx: -1 }];
+            node.paragraphs.forEach((p, idx) => segments.push({ text: p, paraIdx: idx }));
+
+            const remark = node.companionRemarks[gameState.companion.id];
+            if (remark) {
+                segments.push({ text: `${gameState.companion.name} whispers: ${remark.replace(/^["“]|["”]$/g, '')}`, paraIdx: -1 });
+            }
+
+            if (narratorState.readChoices && !node.isEnding) {
+                const visible = node.choices.filter(c => (!c.archetypeReq || c.archetypeReq === gameState.archetype.id));
+                if (visible.length > 0) {
+                    segments.push({
+                        text: 'Your choices are: ' + visible.map((c, i) => `Option ${i + 1}: ${c.text}`).join('. '),
+                        paraIdx: -1
+                    });
+                }
+            }
+
+            speakQueue(segments);
+        }
+
+        function speakLookingGlassAnswer() {
+            const txt = document.getElementById('looking-glass-answer').textContent.trim();
+            if (!txt) return;
+            speakQueue([{ text: `${gameState.companion.name} says: ${txt.replace(/^["“]|["”]$/g, '')}`, paraIdx: -1 }]);
+        }
+
+        function speakQueue(segments) {
+            if (!narratorState.supported) return;
+            stopNarration();
+
+            narratorState.token += 1;
+            const currentToken = narratorState.token;
+            narratorState.queue = segments;
+            narratorState.queueIndex = 0;
+            narratorState.isSpeaking = true;
+            narratorState.isPaused = false;
+            updateNarrationButtonsUI();
+
+            playNextSegment(currentToken);
+        }
+
+        function playNextSegment(token) {
+            if (token !== narratorState.token) return;
+            if (narratorState.queueIndex >= narratorState.queue.length) {
+                stopNarration();
+                return;
+            }
+
+            const seg = narratorState.queue[narratorState.queueIndex];
+            highlightParagraph(seg.paraIdx);
+
+            const utter = new SpeechSynthesisUtterance(seg.text);
+            const voice = narratorState.voices.find(v => v.voiceURI === narratorState.selectedVoiceURI) || narratorState.voices[0];
+            if (voice) utter.voice = voice;
+            utter.rate = narratorState.rate;
+            utter.pitch = 1.02;
+
+            utter.onend = () => {
+                if (token !== narratorState.token) return;
+                narratorState.queueIndex += 1;
+                playNextSegment(token);
+            };
+            utter.onerror = () => {
+                if (token !== narratorState.token) return;
+                stopNarration();
+            };
+
+            window.speechSynthesis.speak(utter);
+        }
+
+        function stopNarration() {
+            narratorState.token += 1;
+            narratorState.isSpeaking = false;
+            narratorState.isPaused = false;
+            narratorState.queue = [];
+            narratorState.queueIndex = 0;
+            highlightParagraph(-1);
+
+            if (narratorState.supported) {
+                try { window.speechSynthesis.cancel(); } catch (e) {}
+            }
+            updateNarrationButtonsUI();
+        }
+
+        function highlightParagraph(idx) {
+            document.querySelectorAll('#scene-narrative p').forEach(p => {
+                const pIdx = parseInt(p.getAttribute('data-narration-idx'), 10);
+                if (pIdx === idx) p.classList.add('narrating-paragraph');
+                else p.classList.remove('narrating-paragraph');
+            });
+        }
+
+        function updateNarrationButtonsUI() {
+            const hIcon = document.getElementById('header-read-icon');
+            const hLabel = document.getElementById('header-read-label');
+            const hWave = document.getElementById('header-wave-bars');
+            const hStop = document.getElementById('btn-header-stop');
+            const sIcon = document.getElementById('scene-read-icon');
+            const sLabel = document.getElementById('scene-read-label');
+            if (!hIcon || !sIcon) return;
+
+            if (narratorState.isSpeaking && !narratorState.isPaused) {
+                hIcon.textContent = '⏸️';
+                hLabel.textContent = 'Pause';
+                hWave.classList.remove('hidden');
+                hWave.classList.add('is-speaking');
+                hStop.classList.remove('hidden');
+                sIcon.textContent = '⏸️';
+                sLabel.textContent = 'Pause Narration';
+            } else if (narratorState.isSpeaking && narratorState.isPaused) {
+                hIcon.textContent = '▶️';
+                hLabel.textContent = 'Resume';
+                hWave.classList.add('hidden');
+                hWave.classList.remove('is-speaking');
+                hStop.classList.remove('hidden');
+                sIcon.textContent = '▶️';
+                sLabel.textContent = 'Resume Narration';
+            } else {
+                hIcon.textContent = '🔊';
+                hLabel.textContent = 'Read Aloud';
+                hWave.classList.add('hidden');
+                hWave.classList.remove('is-speaking');
+                hStop.classList.add('hidden');
+                sIcon.textContent = '🔊';
+                sLabel.textContent = 'Read Page Aloud';
+            }
+        }
+    </script>
+</body>
+</html>
